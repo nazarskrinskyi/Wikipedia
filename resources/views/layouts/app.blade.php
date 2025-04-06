@@ -39,6 +39,35 @@
             </div>
         </div>
 
+        <form action="{{ route('search') }}" method="GET">
+            <input type="text" name="q" id="search" placeholder="Пошук...">
+            <select name="category_id">
+                <option value="">Всі категорії</option>
+                @foreach (\App\Models\Category::all() as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+            <button type="submit">🔍</button>
+        </form>
+
+        <ul id="autocomplete-results"></ul>
+
+        <script>
+            document.getElementById('search').addEventListener('input', function() {
+                fetch(`/autocomplete?q=${this.value}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let resultsList = document.getElementById('autocomplete-results');
+                        resultsList.innerHTML = '';
+                        data.forEach(title => {
+                            let li = document.createElement('li');
+                            li.textContent = title;
+                            resultsList.appendChild(li);
+                        });
+                    });
+            });
+        </script>
+
         <!-- Load CKEditor Script -->
         <script src="https://cdn.ckeditor.com/ckeditor5/44.2.1/ckeditor5.umd.js" crossorigin></script>
     </main>

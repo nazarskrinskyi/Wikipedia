@@ -9,6 +9,11 @@
     }
 }
 
+.missing-article {
+    color: red;
+    text-decoration: underline;
+}
+
 .main-container {
     font-family: 'Lato', serif;
     width: fit-content;
