@@ -3,15 +3,18 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleLikeController;
 use App\Http\Controllers\ArticleVersionController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -22,6 +25,8 @@ Route::middleware('auth')->group(function () {
 Route::post('/ckeditor/upload', [CKEditorUploadController::class, 'upload'])->name('ckeditor.upload');
 
 Route::resource('articles', ArticleController::class);
+
+Route::resource('categories', CategoryController::class);
 
 Route::get('/articles/popular', [ArticleController::class, 'popular'])->name('articles.popular');
 

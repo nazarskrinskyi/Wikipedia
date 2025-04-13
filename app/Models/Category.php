@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
+/**
+ * @method static create(array $validated)
+ * @method static where(string $string, string $string1, mixed $id)
+ * @property mixed $id
+ * @property mixed $children
+ */
 class Category extends Model
 {
     use HasFactory;

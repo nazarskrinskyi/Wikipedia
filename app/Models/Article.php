@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
  * @method static create(array $validated)
  * @method comments()
  * @method static withCount(array $array)
+ * @method static inRandomOrder()
  */
 class Article extends Model
 {

@@ -19,7 +19,7 @@ class ArticleLikeController extends Controller
         return $this->handleLike($article, false);
     }
 
-    private function handleLike(Article $article, bool $is_like)
+    private function handleLike(Article $article, bool $is_like): RedirectResponse
     {
         $user = Auth::user();
 
@@ -27,8 +27,8 @@ class ArticleLikeController extends Controller
 
         if ($like) {
             $like->is_like === $is_like ?
-                $like->delete() : // Якщо повторний клік на ту ж кнопку — видаляємо лайк/дизлайк
-                $like->update(['is_like' => $is_like]); // Зміна лайка на дизлайк або навпаки
+                $like->delete() :
+                $like->update(['is_like' => $is_like]);
         } else {
             ArticleLike::create([
                 'article_id' => $article->id,
