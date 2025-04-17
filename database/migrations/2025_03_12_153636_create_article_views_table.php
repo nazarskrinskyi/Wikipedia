@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('article_views', function (Blueprint $table) {
             $table->id();
             $table->foreignId('article_id')->constrained()->onDelete('cascade');
-            $table->ipAddress('ip'); // Фіксуємо перегляди по IP
+            $table->ipAddress('ip');
             $table->timestamps();
         });
     }

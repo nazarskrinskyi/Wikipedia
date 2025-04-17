@@ -20,45 +20,37 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 add ssh in github|gitlab
+
 ```
 ssh-keygen -t ed25519 -C "your_email@example.com"
 cat ~/.ssh/id_ed25519.pub
 ```
 
+build docker
 ```
-./vendor/bin/sail up -d
+docker-compose build
+```
 
-if error 
-
+run docker
+```
 docker-compose up -d
 ```
 
-if error and you dont have vendor dir use
-
-```
-sudo add-apt-repository ppa:ondrej/php
-sudo apt install php8.4 php8.4-cli php8.4-fpm php8.4-mbstring php8.4-xml php8.4-mysql php8.4-curl php8.4-zip php8.4-bcmath
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-```
-
-next
-
-```
-./vendor/bin/sail artisan migrate
-```
-
-to enter the php container in docker
-
+to enter docker-container
 ```
 docker-compose exec laravel.test sh
 ```
 
-to run project after setup (and dont forget to run ./vendor/bin/sail up -d -_-)
+run migration commnand (run in docker-container)
+```
+php artisan migrate
+```
+
+final command to start project (run in docker-container)
 
 ```
-./vendor/bin/sail yarn run dev
-``` 
+yarn run dev
+```
 
 ## License
 

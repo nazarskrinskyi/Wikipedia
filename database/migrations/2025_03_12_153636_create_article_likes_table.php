@@ -11,10 +11,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('article_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->boolean('is_like'); // true = like, false = dislike
+            $table->boolean('is_like');
             $table->timestamps();
 
-            $table->unique(['article_id', 'user_id']); // Користувач може поставити лише 1 лайк/дизлайк
+            $table->unique(['article_id', 'user_id']);
         });
     }
 

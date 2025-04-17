@@ -6,6 +6,7 @@ use App\Http\Controllers\ArticleVersionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;

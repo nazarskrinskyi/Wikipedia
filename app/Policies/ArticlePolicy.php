@@ -9,9 +9,9 @@ use App\Models\User;
 
 class ArticlePolicy
 {
-    public function view(User $user, Article $article): true
+    public function view(): true
     {
-        return true; // Усі можуть переглядати статті
+        return true;
     }
 
     public function create(User $user): bool
@@ -26,11 +26,11 @@ class ArticlePolicy
 
     public function delete(User $user, Article $article): bool
     {
-        return $user->isAdmin(); // Тільки адміністратор може видаляти статті
+        return $user->isAdmin();
     }
 
     public function approve(User $user): bool
     {
-        return $user->isModerator(); // Тільки модератори можуть схвалювати зміни
+        return $user->isModerator();
     }
 }
