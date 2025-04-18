@@ -10,6 +10,6 @@ class HomeController
 {
     public function index(): View
     {
-        return view('dashboard');
+        return view('home');
     }
 }
