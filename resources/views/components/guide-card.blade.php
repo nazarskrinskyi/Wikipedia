@@ -8,26 +8,22 @@
 
 <div
     class="relative group max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-sm 
-    dark:bg-gray-800 dark:border-gray-700 overflow-hidden">
+    dark:bg-gray-800 dark:border-gray-700 overflow-hidden ">
 
-    <!-- Градиент на всю карточку -->
-    <div
-        class="absolute inset-0 bg-gradient-to-tr from-[{{ $colorFrom }}] to-[{{ $colorTo }}] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style="background: linear-gradient(to top right, {{ $colorFrom }}, {{ $colorTo }});">
     </div>
 
     <div class="relative overflow-hidden inline-block">
 
-        <!-- Градиент-фон внутри картинки -->
-        <div
-            class="rounded-lg absolute inset-0 bg-gradient-to-tr from-[{{ $colorFrom }}] to-[{{ $colorTo }}] transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+        <div class="rounded-lg absolute inset-0  transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+            style="background: linear-gradient(to top right, {{ $colorFrom }}, {{ $colorTo }});">
         </div>
 
-        <!-- Отдельный бордер -->
         <div
             class="absolute inset-0 border-2 border-transparent group-hover:border-white group-hover:border-opacity-25 transition-all duration-300 rounded-lg pointer-events-none">
         </div>
 
-        <!-- SVG -->
         <div class="relative z-10">
             <img class="w-16 h-16" src="{{ asset('images/' . $image) }}" alt="{{ $title }}">
         </div>
