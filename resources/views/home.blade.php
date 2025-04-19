@@ -9,8 +9,8 @@
             <x-pop-up message="{{ session('success') }}" />
         @endif --}}
 
-        <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
-            class="text-blue-500 dark:text-blue-300 flex items-center px-1 py-2 focus:bg-gray-100 dark:focus:bg-gray-600 rounded-lg ">
+        <button
+            class="text-blue-500 dark:text-blue-300 flex items-center px-1 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg ">
             <a class="font-semibold text-4xl">
                 front-end
             </a>

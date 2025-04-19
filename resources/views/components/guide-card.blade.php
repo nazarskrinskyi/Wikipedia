@@ -29,7 +29,7 @@
 
         <!-- SVG -->
         <div class="relative z-10">
-            {!! file_get_contents(public_path('images/' . $image)) !!}
+            <img class="w-16 h-16" src="{{ asset('images/' . $image) }}" alt="{{ $title }}">
         </div>
 
     </div>
