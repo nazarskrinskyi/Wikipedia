@@ -3,16 +3,16 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
             <!-- Logo -->
-            <div class='flex items-center gap-2'>
+            <div class='flex items-center'>
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home.index') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
-                <div class="text-logo font-semibold text-3xl"> / </div>
+                <div class="text-logo font-semibold text-3xl ml-2 mr-1"> / </div>
 
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
-                    class="hidden text-logo sm:flex items-center px-4 py-2 focus:bg-gray-100 dark:focus:bg-gray-600 rounded-lg ">
+                    class="hidden text-logo sm:flex items-center px-1 py-2 focus:bg-gray-300 dark:focus:bg-gray-600 rounded-lg ">
                     <a class="font-semibold text-3xl">
                         front-end
                     </a>
