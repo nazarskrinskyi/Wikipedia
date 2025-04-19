@@ -7,7 +7,7 @@
 ])
 
 <div
-    class="relative group max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-sm 
+    class="relative h-full group max-w-sm p-6 bg-gray-100 border border-gray-200 rounded-lg shadow-sm
     dark:bg-gray-800 dark:border-gray-700 overflow-hidden ">
 
     <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="relative z-10">
-            <img class="w-16 h-16" src="{{ asset('images/' . $image) }}" alt="{{ $title }}">
+            <img class="w-16 h-16" src="{{ asset('uploads/' . $image) }}" alt="{{ $title }}">
         </div>
 
     </div>

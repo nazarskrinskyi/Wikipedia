@@ -60,5 +60,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
 });
 
+Route::get('category/{slug}', [CategoryController::class, 'showCategory'])->name('category.show');
 
 require __DIR__.'/auth.php';

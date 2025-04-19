@@ -64,16 +64,64 @@
 
                     <div class="custom-file">
                         <input type="file" name="preview_path" id="preview_path"
-                               class="custom-file-input @error('preview_path') is-invalid @enderror">
+                               class="custom-file-input @error('preview_path') is-invalid @enderror"
+                               accept="image/svg+xml">
                         <label class="custom-file-label" for="preview_path">Оберіть файл...</label>
 
                         @error('preview_path')
                         <span class="invalid-feedback d-block mt-1">{{ $message }}</span>
                         @enderror
                     </div>
+
+                    @if (isset($category) && $category->preview_path)
+                        <div id="current-image-wrapper" class="mt-3">
+                            <p>Поточне зображення:</p>
+                            <img src="{{ asset('uploads/' . $category->preview_path) }}"
+                                 alt="Current Image"
+                                 id="preview-img"
+                                 style="max-width: 100%; height: auto; border: 1px solid #ccc; padding: 4px;" />
+                        </div>
+                    @else
+                        <!-- Image preview -->
+                        <div id="image-preview" class="mt-3" style="display: none;">
+                            <p>Попередній перегляд:</p>
+                            <img id="preview-img" src="" alt="Image Preview" style="max-width: 100%; height: auto; border: 1px solid #ccc; padding: 4px;" />
+                        </div>
+                    @endif
                 </div>
 
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const fileInput = document.getElementById('preview_path');
+                        const fileLabel = document.querySelector('label[for="preview_path"]');
+                        const previewContainer = document.getElementById('image-preview');
+                        const previewImg = document.getElementById('preview-img');
 
+                        fileInput.addEventListener('change', function () {
+                            const file = fileInput.files[0];
+
+                            if (file) {
+                                fileLabel.textContent = file.name;
+
+                                if (file.type.startsWith('image/')) {
+                                    const reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        previewImg.src = e.target.result;
+                                        previewContainer.style.display = 'block';
+                                    };
+                                    reader.readAsDataURL(file);
+                                } else {
+                                    previewContainer.style.display = 'none';
+                                    previewImg.src = '';
+                                }
+                            } else {
+                                fileLabel.textContent = 'Оберіть файл...';
+                                previewContainer.style.display = 'none';
+                                previewImg.src = '';
+                            }
+                        });
+                    });
+                </script>
 
                 <div class="form-group">
                     <label for="color">Колір</label>
@@ -108,13 +156,30 @@
             const nameInput = document.getElementById("name");
             const slugInput = document.getElementById("slug");
 
-            nameInput.addEventListener("input", function () {
-                slugInput.value = nameInput.value
-                    .toLowerCase()
+            function transliterate(text) {
+                const map = {
+                    а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh',
+                    з: 'z', и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o',
+                    п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'ts',
+                    ч: 'ch', ш: 'sh', щ: 'shch', ъ: '', ы: 'y', ь: '', э: 'e',
+                    ю: 'yu', я: 'ya', є: 'ye', і: 'i', ї: 'yi', ґ: 'g'
+                };
+
+                return text.toLowerCase().split('').map(char =>
+                    map[char] || char
+                ).join('');
+            }
+
+            function generateSlug(text) {
+                return transliterate(text)
                     .trim()
                     .replace(/[^a-z0-9\s-]/g, '')
                     .replace(/\s+/g, '-')
                     .replace(/-+/g, '-');
+            }
+
+            nameInput.addEventListener("input", function () {
+                slugInput.value = generateSlug(nameInput.value);
             });
         });
         document.querySelector('.custom-file-input').addEventListener('change', function (e) {

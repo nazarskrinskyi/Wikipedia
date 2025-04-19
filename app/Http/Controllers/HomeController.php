@@ -11,7 +11,7 @@ class HomeController
 {
     public function index(): View
     {
-        $categories = Category::with('children')->whereNull('parent_id');
+        $categories = Category::with('children')->whereNull('parent_id')->get();
 
         return view('home', compact('categories'));
     }

@@ -64,6 +64,13 @@ class CategoryController extends Controller
         return view('admin.category.form', compact('category'));
     }
 
+    public function showCategory(string $slug): View
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+
+        return view('category', compact('category'));
+    }
+
     public function edit(Category $category): View
     {
         $categories = Category::where('id', '!=', $category->id)->get();
