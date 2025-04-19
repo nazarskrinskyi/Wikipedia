@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -31,7 +32,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (Auth::user()?->role !== 'admin') {
+        if (!Auth::user()?->is_admin) {
             $this->authorize('create', Category::class);
         }
 
@@ -39,7 +40,8 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255|unique:categories,name',
             'slug' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:categories,id',
-            'color' => 'nullable|string',
+            'from_color' => 'nullable|string',
+            'to_color' => 'nullable|string',
             'preview_path' => 'nullable|image|max:2048',
         ]);
 
@@ -73,7 +75,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category): RedirectResponse
     {
-        if (Auth::user()?->role !== 'admin') {
+        if (!Auth::user()?->is_admin) {
             $this->authorize('update', $category);
         }
 
@@ -81,7 +83,8 @@ class CategoryController extends Controller
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
             'slug' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:categories,id|not_in:' . $category->id,
-            'color' => 'nullable|string',
+            'from_color' => 'nullable|string',
+            'to_color' => 'nullable|string',
             'preview_path' => 'nullable|image|max:2048',
         ]);
 
@@ -103,7 +106,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        if (Auth::user()?->role !== 'admin') {
+        if (!Auth::user()?->is_admin) {
             $this->authorize('delete', $category);
         }
 

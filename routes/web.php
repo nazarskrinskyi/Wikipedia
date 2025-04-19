@@ -1,15 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleLikeController;
 use App\Http\Controllers\ArticleVersionController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -22,6 +23,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/search', [SearchController::class, 'search']);
 
 Route::post('/ckeditor/upload', [CKEditorUploadController::class, 'upload'])->name('ckeditor.upload');
 
@@ -48,8 +51,14 @@ Route::get('/random', [ArticleController::class, 'random'])->name('articles.rand
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 Route::get('/autocomplete', [SearchController::class, 'autocomplete'])->name('autocomplete');
 
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('admin.dashboard');
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
+    Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
+});
+
 
 require __DIR__.'/auth.php';

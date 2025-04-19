@@ -17,7 +17,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'parent_id', 'preview_path', 'color'];
+    protected $fillable = ['name', 'slug', 'parent_id', 'preview_path', 'from_color', 'to_color'];
 
     protected static function boot(): void
     {

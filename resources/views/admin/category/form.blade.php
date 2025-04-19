@@ -77,10 +77,20 @@
 
                 <div class="form-group">
                     <label for="color">Колір</label>
-                    <input type="color" name="color" id="color"
-                           value="{{ old('color', $category->color ?? '#000000') }}"
-                           class="form-control @error('color') is-invalid @enderror">
-                    @error('color')
+                    <input type="color" name="from_color" id="color"
+                           value="{{ old('from_color', $category->from_color ?? '#000000') }}"
+                           class="form-control @error('from_color') is-invalid @enderror">
+                    @error('from_color')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="color">Колір</label>
+                    <input type="color" name="to_color" id="color"
+                           value="{{ old('to_color', $category->to_color ?? '#000000') }}"
+                           class="form-control @error('to_color') is-invalid @enderror">
+                    @error('to_color')
                     <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
