@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 /**
  * @method static create(array $validated)
- * @method static where(string $string, string $string1, mixed $id)
  * @property mixed $id
  * @property mixed $children
  */
@@ -18,7 +17,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'parent_id'];
+    protected $fillable = ['name', 'slug', 'parent_id', 'preview_path', 'color'];
 
     protected static function boot(): void
     {

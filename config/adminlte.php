@@ -312,19 +312,15 @@ return [
 
         // Sidebar items:
         [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
-        [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
-        ],
-        [
             'text' => 'Зворотній зв\'язок',
             'url' => 'admin/contact-us/',
             'icon' => 'fas fa-pencil-ruler',
         ],
+        [
+            'text' => 'Категорії',
+            'url'  => 'categories',
+            'icon' => 'fas fa-tags',
+        ] // optional icon
 //        ['header' => 'account_settings'],
 //        [
 //            'text' => 'profile',
