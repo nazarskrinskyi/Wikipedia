@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,21 +29,19 @@
 </head>
 
 <body class="font-sans antialiased">
-<div class="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-900">
-    @include('layouts.navigation')
+    <div class="flex flex-col justify-between min-h-screen bg-white dark:bg-black">
+        @include('layouts.navigation')
 
-    <!-- Page Content -->
-    <main>
-        {{ $slot }}
-    </main>
+        <!-- Page Content -->
+        <main class="flex-grow">
+            {{ $slot }}
+        </main>
 
-    <!-- Page Footer -->
-    @isset($footer)
-
-        {{ $footer }}
-
-    @endisset
-</div>
+        <!-- Page Footer -->
+        @isset($footer)
+            {{ $footer }}
+        @endisset
+    </div>
 </body>
 
 </html>

@@ -1,50 +1,42 @@
 <x-app-layout>
-    <div class="gap-6 py-12 container mx-auto">
+    <div class="gap-6 py-12 container mx-auto max-w-7xl">
         <x-slot name="footer">
-            <x-footer />
+            <x-footer/>
         </x-slot>
 
 
-        @if (session('success'))
+        {{-- @if (session('success'))
             <x-pop-up message="{{ session('success') }}" />
-        @endif
+        @endif --}}
 
+        <a href="{{ route('articles.index') }}"
+           class="mb-4 text-blue-500 dark:text-blue-300 inline-flex items-center px-1 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg ">
+            <h3 class="text-blue-500 dark:text-blue-300 font-semibold text-4xl">
+                front-end
+            </h3>
+            <svg class="w-4 h-4 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M1 1l4 4-4 4"/>
+            </svg>
+        </a>
 
-
-        <!-- Banner -->
-        <x-home.banner />
-
-        <!-- Popular Locations -->
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 self-start mb-4 pt-4">Найбільш популярні</h2>
-        <div class="grid grid-cols-4 gap-6">
-            {{-- @if (count($topRatedLocations) == 0) --}}
-            {{-- <div --}} {{--
-                class='w-full flex items-center justify-center h-48 text-center text-xl font-semibold text-gray-800 dark:text-gray-200 '> --}}
-            {{-- Популярні локації відсутні --}}
-            {{-- </div> --}}
-            {{-- @else --}}
-            @foreach ($topRatedLocations as $location)
-                <x-location-card :id="$location->id" :image="asset('uploads/' . $location->image_path)" :title="$location->name" :rating="intval($location->avg_rating) == $location->avg_rating
-                    ? intval($location->avg_rating)
-                    : number_format($location->avg_rating, 1)" />
+        <ul class="grid grid-cols-3 gap-4">
+            @foreach($categories as $category)
+                <li>
+                    <a href="{{ route('category.show', $category->slug) }}">
+                        <x-guide-card
+                            :image="$category->preview_path"
+                            :title="$category->name"
+                            :id="$category->id"
+                            :colorFrom="$category->from_color"
+                            :colorTo="$category->to_color"
+                        />
+                    </a>
+                </li>
             @endforeach
-            {{-- @endif --}}
-        </div>
-        <!-- Recently Added Locations -->
-        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 self-start mb-4 pt-4">Нові</h2>
-        <div class="grid grid-cols-4 gap-6">
-            {{-- @if (count($latestLocations) == 0) --}}
-            {{-- <div --}} {{--
-            class='w-full flex items-center justify-center h-48 text-center text-xl font-semibold text-gray-800 dark:text-gray-200 '> --}}
-            {{-- Нові локації відсутні --}}
-            {{-- </div> --}}
-            {{-- @else --}}
-            @foreach ($latestLocations as $location)
-                <x-location-card :id="$location->id" :image="asset('uploads/' . $location->image_path)" :title="$location->name" :rating="intval($location->avg_rating) == $location->avg_rating
-                    ? intval($location->avg_rating)
-                    : number_format($location->avg_rating, 1)" />
-            @endforeach
-            {{-- @endif --}}
-        </div>
+        </ul>
+
+
     </div>
 </x-app-layout>

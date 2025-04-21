@@ -11,6 +11,9 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('preview_path')->nullable();
+            $table->string('from_color')->nullable();
+            $table->string('to_color')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->timestamps();
         });

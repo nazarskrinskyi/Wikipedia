@@ -82,10 +82,11 @@ const {
     Subscript,
     Strikethrough,
     Superscript,
-    MediaEmbed
+    MediaEmbed,
 } = window.CKEDITOR;
 
-const LICENSE_KEY = "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzE3MTgzOTksImp0aSI6ImQ2ZTg0NGUxLWY1ZTMtNDcxNC04NGUwLTQwZWMyZjkyNmQ1YiIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6IjU0ZDAwNzM3In0.YytQnwN1J25Vs6dGqO3-A89N7lgG6XNTwS3UU3seia74mu3bikIHKGGB5AlH2tKak0uzc_McnZm-9wzdCkh_Lw";
+const LICENSE_KEY =
+    "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NzE3MTgzOTksImp0aSI6ImQ2ZTg0NGUxLWY1ZTMtNDcxNC04NGUwLTQwZWMyZjkyNmQ1YiIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiXSwiZmVhdHVyZXMiOlsiRFJVUCJdLCJ2YyI6IjU0ZDAwNzM3In0.YytQnwN1J25Vs6dGqO3-A89N7lgG6XNTwS3UU3seia74mu3bikIHKGGB5AlH2tKak0uzc_McnZm-9wzdCkh_Lw";
 
 const editorConfig = {
     toolbar: {
@@ -114,7 +115,7 @@ const editorConfig = {
             "outdent",
             "indent",
             "|",
-            "mediaEmbed"
+            "mediaEmbed",
         ],
         shouldNotGroupWhenFull: false,
     },
@@ -162,7 +163,7 @@ const editorConfig = {
         Strikethrough,
         Subscript,
         Superscript,
-        MediaEmbed
+        MediaEmbed,
     ],
     language: "uk",
     licenseKey: LICENSE_KEY,
@@ -235,10 +236,10 @@ const editorConfig = {
 };
 
 ClassicEditor.create(document.querySelector("#editor"), editorConfig)
-    .then(editor => {
-        editor.model.document.on('change:data', () => {
-            console.log(editor.getData())
-            document.querySelector('#description').value = editor.getData();
+    .then((editor) => {
+        editor.model.document.on("change:data", () => {
+            console.log(editor.getData());
+            document.querySelector("#description").value = editor.getData();
         });
     })
-    .catch(error => console.error("CKEditor initialization error:", error));
+    .catch((error) => console.error("CKEditor initialization error:", error));
