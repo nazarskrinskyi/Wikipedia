@@ -15,7 +15,7 @@
                 <div class="text-logo font-semibold text-3xl ml-2 mr-1"> / </div>
 
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
-                    class="hidden text-logo sm:flex items-center px-1 py-2 focus:bg-gray-300 dark:focus:bg-gray-600 rounded-lg ">
+                    class="hidden text-logo sm:flex items-center px-1 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg ">
                     <a class="font-semibold text-3xl">
                         front-end
                     </a>
@@ -44,7 +44,7 @@
                 </div>
             @endif
         </div>
-        <div class=' items-center self-center max-w-3xl flex-grow relative z-50'>
+        <div class='flex items-center self-center max-w-2xl flex-grow relative z-50 mx-1'>
             <x-search-input placeholder="Пошук по wiki" />
 
             {{-- Search Results --}}
