@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 
 /**
  * @method static create(array $validated)
+ * @method static findOrFail(int $categoryId)
  * @property mixed $id
  * @property mixed $children
  */

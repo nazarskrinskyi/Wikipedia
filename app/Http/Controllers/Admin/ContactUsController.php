@@ -17,7 +17,7 @@ class ContactUsController extends Controller
         return view('admin.contact_us.index', compact('contactUsEntries'));
     }
 
-    public function show($id): View
+    public function show(int $id): View
     {
         $contactUsEntry = ContactUs::findOrFail($id);
 

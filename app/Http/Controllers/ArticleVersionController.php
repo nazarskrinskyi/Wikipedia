@@ -10,10 +10,16 @@ use Illuminate\View\View;
 
 class ArticleVersionController extends Controller
 {
-    public function index(Article $article): View
+    public function index(): View
     {
-        $versions = ArticleVersion::where('article_id', $article->id)->latest()->get();
-        return view('articles.versions', compact('article', 'versions'));
+        $versions = ArticleVersion::latest()->paginate(10);
+        return view('admin.article_versions.index', compact('versions'));
+    }
+
+    public function show(string $slug): View
+    {
+        $versions = ArticleVersion::where('slug', $slug)->latest()->paginate(10);
+        return view('admin.articles_versions.index', compact('slug', 'versions'));
     }
 
     public function restore(Article $article, ArticleVersion $version): RedirectResponse

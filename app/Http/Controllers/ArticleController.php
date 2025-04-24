@@ -23,6 +23,28 @@ class ArticleController extends Controller
         return view('articles.index', compact('articles'));
     }
 
+    public function indexApprove(): View
+    {
+        $articles = Article::latest()->where('approved', false)->paginate(10);
+        return view('admin.articles.index', compact('articles'));
+    }
+
+    public function showArticles(string $slug): View
+    {
+        $category = Category::where('slug', $slug)->firstOrFail();
+        $articles = $category->articles()->where('approved', true)->latest()->paginate(10);
+
+        return view('articles.index', compact('articles'));
+    }
+
+    public function filterArticles(int $categoryId): View
+    {
+        $category = Category::findOrFail($categoryId);
+        $articles = $category->articles()->where('approved', false)->latest()->paginate(10);
+
+        return view('admin.articles.index', compact('articles'));
+    }
+
     public function create(): View
     {
         $categories = Category::all();
@@ -65,7 +87,7 @@ class ArticleController extends Controller
         }])
             ->orderByDesc('views_count')
             ->orderByDesc('likes_count')
-            ->take(10) // Беремо топ-10
+            ->take(10)
             ->get();
 
         return view('articles.popular', compact('articles'));
@@ -75,7 +97,6 @@ class ArticleController extends Controller
     {
         $ip = request()->ip();
 
-        // Записуємо перегляд тільки якщо IP не записаний сьогодні
         if (!ArticleView::where('article_id', $article->id)->where('ip', $ip)->whereDate('created_at', today())->exists()) {
             ArticleView::create([
                 'article_id' => $article->id,
@@ -126,8 +147,8 @@ class ArticleController extends Controller
     public function destroy(Article $article): RedirectResponse
     {
         $this->authorize('delete', $article);
-
         $article->delete();
+
         return redirect()->route('articles.index')->with('success', 'Стаття видалена!');
     }
 

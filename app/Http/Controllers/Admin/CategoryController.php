@@ -68,7 +68,7 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        return view('category', compact('category'));
+        return view('category.index', compact('category'));
     }
 
     public function edit(Category $category): View

@@ -36,9 +36,6 @@ Route::get('/articles/popular', [ArticleController::class, 'popular'])->name('ar
 
 Route::post('articles/{article}/approve', [ArticleController::class, 'approve'])->name('articles.approve')->middleware('can:approve-articles');
 
-Route::get('articles/{article}/versions', [ArticleVersionController::class, 'index'])->name('articles.versions');
-Route::post('articles/{article}/versions/{version}/restore', [ArticleVersionController::class, 'restore'])->name('articles.versions.restore');
-
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->middleware('auth')->name('comments.store');
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth')->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth')->name('comments.destroy');
@@ -58,8 +55,20 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
+
+    Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
+    Route::get('articles-versions/{slug}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
+    Route::post('articles-versions/', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
+
+    Route::get('articles-approve/', [ArticleController::class, 'indexApprove'])->name('articles-approve.index');
+    Route::get('articles-approve/{category}', [ArticleController::class, 'filterArticles'])->name('articles-approve.show');
+    Route::post('articles-approve/', [ArticleController::class, 'approve'])->name('articles-approve.approve');
 });
 
 Route::get('category/{slug}', [CategoryController::class, 'showCategory'])->name('category.show');
+
+Route::get('articles/{slug}', [ArticleController::class, 'showArticles'])->name('category.articles.show');
+
+Route::get('article/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 
 require __DIR__.'/auth.php';

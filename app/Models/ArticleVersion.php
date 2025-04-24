@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static create(array $array)
  * @method static where(string $string, mixed $id)
+ * @method static latest()
  * @property mixed $title
  * @property mixed $slug
  * @property mixed $content
