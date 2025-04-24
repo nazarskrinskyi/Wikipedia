@@ -29,6 +29,11 @@ class Category extends Model
         });
     }
 
+    public function articles(): HasMany
+    {
+        return $this->hasMany(Article::class);
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
@@ -37,5 +42,18 @@ class Category extends Model
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    public function getParentHierarchy(): array
+    {
+        $parents = [];
+        $current = $this->parent;
+
+        while ($current) {
+            $parents[] = $current;
+            $current = $current->parent;
+        }
+
+        return array_reverse($parents);
     }
 }

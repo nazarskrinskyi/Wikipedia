@@ -20,7 +20,7 @@ class ArticleVersion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['article_id', 'preview_path', 'title', 'slug', 'content', 'category_id', 'user_id'];
+    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description'];
 
     public function article(): BelongsTo
     {

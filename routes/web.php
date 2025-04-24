@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\CategoryController as CategoryCatalogController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleLikeController;
@@ -65,7 +66,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::post('articles-approve/', [ArticleController::class, 'approve'])->name('articles-approve.approve');
 });
 
-Route::get('category/{slug}', [CategoryController::class, 'showCategory'])->name('category.show');
+Route::get('category/{slug}', [CategoryCatalogController::class, 'showCategory'])->name('category.show');
 
 Route::get('articles/{slug}', [ArticleController::class, 'showArticles'])->name('category.articles.show');
 

@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('article_id')->constrained()->onDelete('cascade');
             $table->string('title');
+            $table->string('description');
             $table->string('preview_path')->unique();
             $table->string('slug')->unique();
             $table->text('content');
