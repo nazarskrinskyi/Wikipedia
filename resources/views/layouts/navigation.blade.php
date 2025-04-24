@@ -1,8 +1,9 @@
 <nav x-data="{ open: false }" id='navbar'
     class="w-full h-[var(--navbar-height)] bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 z-50">
     <!-- Primary Navigation Menu -->
-    <div class="flex  justify-between items-center max-w-7xl h-full items-center mx-auto px-4
-        sm:px-6 lg:px-8">
+    <div
+        class="flex justify-between items-center max-w-7xl h-full items-center mx-auto px-4
+        sm:px-6 lg:px-8 py-2">
         <!-- Logo -->
         <div class='flex items-center'>
             <div class="shrink-0 flex items-center">
