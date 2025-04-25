@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="gap-6 py-12 container mx-auto max-w-7xl">
+    <div class="gap-6 py-12 container mx-auto max-w-7xl flex-grow">
         <x-slot name="footer">
             <x-footer/>
         </x-slot>
