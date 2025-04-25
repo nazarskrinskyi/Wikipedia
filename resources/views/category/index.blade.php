@@ -5,22 +5,22 @@
         </x-slot>
 
 
-        <aside class='max-w-xl w-1/4'>
-            <div class='sticky top-[5rem]'>
-                <button class='bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
-                    {!! file_get_contents(public_path('images/toggle.svg')) !!}
-                </button>
-                <ul class='mt-4 ml-2 space-y-2 text-gray-400 dark:text-gray-600'>
-                    @foreach ($category->children as $child)
-                        <li class='hover:text-sky-500'>
-                            <a href="#{{ $child->slug }}" class="aside-link">
-                                <span>{{ $loop->iteration }}.</span>
-                                <span>{{ $child->name }}</span>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+        <aside class='max-w-xl w-1/4 sticky top-[5rem] max-h-[calc(100vh-20rem)]'>
+
+            <button class='bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
+                {!! file_get_contents(public_path('images/toggle.svg')) !!}
+            </button>
+            <ul
+                class='mt-4 ml-2 space-y-2 text-gray-400 dark:text-gray-600 max-h-[calc(100vh-23rem)] overflow-y-auto scrollbar-dark'>
+                @foreach ($category->children as $child)
+                    <li class='hover:text-sky-500'>
+                        <a href="#{{ $child->slug }}" class="aside-link">
+                            <span>{{ $loop->iteration }}.</span>
+                            <span>{{ $child->name }}</span>
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
         </aside>
 
         <div class='max-w-5xl w-full'>

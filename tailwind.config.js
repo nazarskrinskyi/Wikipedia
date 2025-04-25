@@ -1,5 +1,6 @@
 import forms from "@tailwindcss/forms";
 import defaultTheme from "tailwindcss/defaultTheme";
+import plugin from "tailwindcss/plugin";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -21,5 +22,21 @@ export default {
         },
     },
 
-    plugins: [forms, require("flowbite/plugin")],
+    plugins: [
+        forms,
+        require("flowbite/plugin"),
+        plugin(function ({ addUtilities }) {
+            addUtilities({
+                ".dark .scrollbar-dark": {
+                    "scrollbar-color": "#364153 #1e2939",
+                },
+                ".dark .scrollbar-dark::-webkit-scrollbar": {
+                    "background-color": "#1e2939",
+                },
+                ".dark .scrollbar-dark::-webkit-scrollbar-thumb": {
+                    "background-color": "#364153",
+                },
+            });
+        }),
+    ],
 };
