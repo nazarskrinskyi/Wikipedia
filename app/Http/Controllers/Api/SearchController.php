@@ -19,6 +19,7 @@ class SearchController extends Controller
         }
 
         $articles = Article::where('title', 'LIKE', '%' . $query . '%')
+            ->andWhere('approved', true)
             ->with('category:id,name,slug')
             ->get(['id', 'title', 'slug', 'category_id']);
 

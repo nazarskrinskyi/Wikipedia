@@ -330,7 +330,12 @@ return [
             'text' => 'Категорії',
             'url'  => 'categories',
             'icon' => 'fas fa-tags',
-        ] // optional icon
+        ],
+        [
+            'text' => 'Ролі Юзерів',
+            'url'  => 'admin/users',
+            'icon' => 'fas fa-tags',
+        ],
 //        ['header' => 'account_settings'],
 //        [
 //            'text' => 'profile',

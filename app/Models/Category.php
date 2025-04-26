@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 /**
  * @method static create(array $validated)
  * @method static findOrFail(int $categoryId)
+ * @method static where(string $string, string $slug)
  * @property mixed $id
  * @property mixed $children
  */

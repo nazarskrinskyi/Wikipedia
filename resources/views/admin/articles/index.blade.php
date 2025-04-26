@@ -8,6 +8,23 @@
 
 @section('content')
     <div class="container">
+        <form method="GET" action="{{ route('articles-approve.filter') }}" class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="category_id">Фільтрувати за категорією:</label>
+                    <select name="category_id" id="category_id" class="form-control" onchange="this.form.submit()">
+                        <option value=""> Всі категорії </option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ (isset($category) && $category->id == $cat->id) || (request()->get('category_id') == $cat->id) ? 'selected' : '' }}>
+                                {{ $cat->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        {{-- Таблиця статей --}}
         @if($articles->count())
             <table class="table table-bordered">
                 <thead>
@@ -22,7 +39,7 @@
                 @foreach($articles as $article)
                     <tr>
                         <td>{{ $article->id }}</td>
-                        <td>{{ $article->name }}</td>
+                        <td>{{ $article->title }}</td>
                         <td>{{ $article->slug }}</td>
                         <td class="text-end">
                             <a href="{{ route('articles-approve.show', $article->id) }}" class="btn btn-sm btn-warning">Показати</a>
@@ -42,7 +59,7 @@
             </table>
 
             <div class="mt-3">
-                {{ $articles->links() }}
+                {{ $articles->appends(request()->query())->links() }}
             </div>
         @else
             <p>Статтей не знайдено.</p>

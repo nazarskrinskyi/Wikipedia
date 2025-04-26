@@ -19,15 +19,26 @@ class ArticleController extends Controller
 
     public function index(): View
     {
-        $articles = Article::latest()->paginate(10);
+        $articles = Article::latest()->where('approved', true)->paginate(10);
         return view('articles.index', compact('articles'));
     }
 
     public function indexApprove(): View
     {
-        $articles = Article::latest()->where('approved', false)->paginate(10);
-        return view('admin.articles.index', compact('articles'));
+        $articles = Article::with('category')
+            ->where('approved', false)
+            ->latest()
+            ->paginate(10);
+
+        $categories = Category::whereIn('id', function($query) {
+            $query->select('category_id')
+                ->from('articles')
+                ->where('approved', false);
+        })->get();
+
+        return view('admin.articles.index', compact('articles', 'categories'));
     }
+
 
     public function showArticles(string $slug): View
     {
@@ -37,12 +48,33 @@ class ArticleController extends Controller
         return view('articles.index', compact('articles'));
     }
 
-    public function filterArticles(int $categoryId): View
+    public function filterArticles(Request $request): View
     {
-        $category = Category::findOrFail($categoryId);
+        $category = Category::find($request->get('category_id'));
+
+        $categories = Category::whereIn('id', function($query) {
+            $query->select('category_id')
+                ->from('articles')
+                ->where('approved', false);
+        })->get();
+
+        if (!$category) {
+            $articles = Article::with('category')
+                ->where('approved', false)
+                ->latest()
+                ->paginate(10);
+
+            return view('admin.articles.index', compact('articles', 'categories'));
+        }
+
         $articles = $category->articles()->where('approved', false)->latest()->paginate(10);
 
-        return view('admin.articles.index', compact('articles'));
+        return view('admin.articles.index', compact('articles', 'categories'));
+    }
+
+    public function showDetails(Article $article): View
+    {
+        return view('admin.articles.show', compact('article'));
     }
 
     public function create(): View
@@ -105,6 +137,7 @@ class ArticleController extends Controller
         }
 
         $article->content = TextHelper::parseInternalLinks($article->content);
+
         return view('articles.show', compact('article'));
     }
 
@@ -156,6 +189,6 @@ class ArticleController extends Controller
     {
         $article->update(['approved' => true]);
 
-        return redirect()->route('articles.index')->with('success', 'Стаття схвалена!');
+        return redirect()->route('article.show', ['article' => $article->id])->with('success', 'Стаття схвалена!');
     }
 }

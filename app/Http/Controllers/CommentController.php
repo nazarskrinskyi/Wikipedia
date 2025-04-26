@@ -17,12 +17,17 @@ class CommentController extends Controller
 
     public function store(Request $request, Article $article): RedirectResponse
     {
-        $validated = $request->validate(['content' => 'required|string']);
+        $validated = $request->validate([
+            'content' => 'required|string'
+        ]);
+
+        $validated['user_id'] = auth()->id();
 
         $article->comments()->create($validated);
 
         return back()->with('success', 'Коментар додано!');
     }
+
 
     /**
      * @throws AuthorizationException

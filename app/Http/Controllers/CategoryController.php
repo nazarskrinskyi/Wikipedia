@@ -15,8 +15,8 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        if ($category->parent === null) {
-            return redirect()->route('home.index');
+        if ($category->parent === null || $category->children()->count() === 0) {
+            abort(404);
         }
 
         $parentCategories = $category->getParentHierarchy();

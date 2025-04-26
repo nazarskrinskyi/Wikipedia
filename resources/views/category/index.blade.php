@@ -51,14 +51,16 @@
                             {{ $child->name }}</h6>
                         <ul>
                             @foreach ($child->articles as $article)
-                                <li class='mb-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
-                                    <h7 class="relative mb-2 text-lg text-sky-500 font-semibold">
-                                        {{ $article->title }}
-                                    </h7>
-                                    <p class='text-md text-gray-900 dark:text-white'>
-                                        {!! htmlspecialchars($article?->description) !!}
-                                    </p>
-                                </li>
+                                @if($article->approved)
+                                    <li class='mb-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
+                                        <h7 class="relative mb-2 text-lg text-sky-500 font-semibold">
+                                            {{ $article->title }}
+                                        </h7>
+                                        <p class='text-md text-gray-900 dark:text-white'>
+                                            {!! htmlspecialchars($article?->description) !!}
+                                        </p>
+                                    </li>
+                                @endif
                             @endforeach
                         </ul>
                     </li>

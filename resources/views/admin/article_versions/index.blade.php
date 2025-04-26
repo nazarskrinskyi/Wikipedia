@@ -8,7 +8,18 @@
 
 @section('content')
     <div class="container">
-        @if($versions->count())
+        <form method="GET" action="{{ route('articles-versions.filter') }}" class="mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" name="search" value="{{ $search ?? '' }}" class="form-control" placeholder="Пошук за назвою статті...">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" type="submit">Пошук</button>
+                </div>
+            </div>
+        </form>
+
+        @if(isset($versions) && $versions->count())
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -22,7 +33,7 @@
                 @foreach($versions as $article)
                     <tr>
                         <td>{{ $article->id }}</td>
-                        <td>{{ $article->name }}</td>
+                        <td>{{ $article->title }}</td>
                         <td>{{ $article->slug }}</td>
                         <td class="text-end">
                             <a href="{{ route('articles-versions.show', $article->id) }}" class="btn btn-sm btn-warning">Показати</a>
@@ -42,7 +53,7 @@
             </table>
 
             <div class="mt-3">
-                {{ $versions->links() }}
+                {{ $versions->appends(['search' => $search])->links() }}
             </div>
         @else
             <p>Версій не знайдено.</p>

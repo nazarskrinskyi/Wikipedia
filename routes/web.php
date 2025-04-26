@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CategoryController as CategoryCatalogController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\ArticleController;
@@ -35,8 +36,6 @@ Route::resource('categories', CategoryController::class);
 
 Route::get('/articles/popular', [ArticleController::class, 'popular'])->name('articles.popular');
 
-Route::post('articles/{article}/approve', [ArticleController::class, 'approve'])->name('articles.approve')->middleware('can:approve-articles');
-
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->middleware('auth')->name('comments.store');
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth')->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->middleware('auth')->name('comments.destroy');
@@ -58,18 +57,22 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
 
     Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
-    Route::get('articles-versions/{slug}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
-    Route::post('articles-versions/', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
+    Route::get('articles-versions/filter', [ArticleVersionController::class, 'filterArticles'])->name('articles-versions.filter');
+    Route::get('articles-versions/{version}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
+    Route::post('articles-versions/{version}', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
 
     Route::get('articles-approve/', [ArticleController::class, 'indexApprove'])->name('articles-approve.index');
-    Route::get('articles-approve/{category}', [ArticleController::class, 'filterArticles'])->name('articles-approve.show');
-    Route::post('articles-approve/', [ArticleController::class, 'approve'])->name('articles-approve.approve');
+    Route::get('articles-approve/filter', [ArticleController::class, 'filterArticles'])->name('articles-approve.filter');
+    Route::get('articles-approve/{article}', [ArticleController::class, 'showDetails'])->name('articles-approve.show');
+    Route::post('articles-approve/{article}', [ArticleController::class, 'approve'])->name('articles-approve.approve');
+
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
 });
 
 Route::get('category/{slug}', [CategoryCatalogController::class, 'showCategory'])->name('category.show');
 
-Route::get('articles/{slug}', [ArticleController::class, 'showArticles'])->name('category.articles.show');
-
-Route::get('article/{slug}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show');
 
 require __DIR__.'/auth.php';
