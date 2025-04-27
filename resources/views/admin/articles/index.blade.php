@@ -7,6 +7,9 @@
 @endsection
 
 @section('content')
+    @if (session('success'))
+        <x-pop-up message="{{ session('success') }}" />
+    @endif
     <div class="container">
         <form method="GET" action="{{ route('articles-approve.filter') }}" class="mb-4">
             <div class="row">
@@ -45,7 +48,7 @@
                             <a href="{{ route('articles-approve.show', $article->id) }}" class="btn btn-sm btn-warning">Показати</a>
                             <form action="{{ route('articles-approve.approve', $article->id) }}" method="POST" class="d-inline">
                                 @csrf
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Ви впевнені?')">Апрув</button>
+                                <button class="btn btn-sm btn-success" onclick="return confirm('Ви впевнені?')">Апрув</button>
                             </form>
                             <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="d-inline">
                                 @csrf

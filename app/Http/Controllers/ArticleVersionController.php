@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-namespace App\Http\Controllers;
 
 use App\Models\Article;
 use App\Models\ArticleVersion;
@@ -31,26 +30,33 @@ class ArticleVersionController extends Controller
             }
         }
 
+        $versions = $search ? $versions : ArticleVersion::latest()->paginate(10);
+
         return view('admin.article_versions.index', compact('versions', 'search'));
     }
 
-    public function show(Article $version): View
+    public function show(ArticleVersion $version): View
     {
-        return view('admin.articles_versions.show', compact('version'));
+        return view('admin.article_versions.show', compact('version'));
     }
 
     public function restore(ArticleVersion $version): RedirectResponse
     {
-        $article = $version->article();
+        $article = $version->article;
+
+        if (!$article) {
+            abort(404, 'Стаття не знайдена для цієї версії.');
+        }
 
         $article->update([
             'title' => $version->title,
             'slug' => $version->slug,
             'content' => $version->content,
+            'description' => $version->description,
             'category_id' => $version->category_id,
             'user_id' => $version->user_id,
         ]);
 
-        return redirect()->route('article.show', $article->id)->with('success', 'Стаття відновлена!');
+        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття відновлена!');
     }
 }

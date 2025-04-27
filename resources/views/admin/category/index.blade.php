@@ -8,6 +8,10 @@
 
 @section('content')
     <div class="container">
+        @if (session('success'))
+            <x-pop-up message="{{ session('success') }}" />
+        @endif
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <a href="{{ route('categories.create') }}" class="btn btn-primary">Створити категорію</a>
         </div>

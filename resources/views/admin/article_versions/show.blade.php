@@ -19,9 +19,9 @@
                 <p><strong>Опис:</strong> {!! nl2br(e($version->description ?? 'Опис відсутній')) !!}</p>
             </div>
             <div class="card-footer text-end">
-                <form action="{{ route('articles-versions.restore', $article->id) }}" method="POST" class="d-inline">
+                <form action="{{ route('articles-versions.restore', $version->id) }}" method="POST" class="d-inline">
                     @csrf
-                    <button class="btn btn-sm btn-danger" onclick="return confirm('Ви впевнені?')">Відновити</button>
+                    <button class="btn btn-sm btn-success" onclick="return confirm('Ви впевнені?')">Відновити</button>
                 </form>
 
                 <a href="{{ route('articles-versions.index') }}" class="btn btn-secondary">Назад</a>

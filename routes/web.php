@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\CategoryController as CategoryCatalogController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\ArticleController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
@@ -45,9 +45,6 @@ Route::post('/articles/{article}/dislike', [ArticleLikeController::class, 'disli
 
 Route::get('/random', [ArticleController::class, 'random'])->name('articles.random');
 
-Route::get('/search', [SearchController::class, 'search'])->name('search');
-Route::get('/autocomplete', [SearchController::class, 'autocomplete'])->name('autocomplete');
-
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
@@ -61,7 +58,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('articles-versions/{version}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
     Route::post('articles-versions/{version}', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
 
-    Route::get('articles-approve/', [ArticleController::class, 'indexApprove'])->name('articles-approve.index');
+    Route::get('articles-approve/', [ArticleController::class, 'index'])->name('articles-approve.index');
     Route::get('articles-approve/filter', [ArticleController::class, 'filterArticles'])->name('articles-approve.filter');
     Route::get('articles-approve/{article}', [ArticleController::class, 'showDetails'])->name('articles-approve.show');
     Route::post('articles-approve/{article}', [ArticleController::class, 'approve'])->name('articles-approve.approve');
@@ -71,8 +68,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
 });
 
-Route::get('category/{slug}', [CategoryCatalogController::class, 'showCategory'])->name('category.show');
+Route::get('category/{slug}', [CategoryCatalogController::class, 'index'])->name('category.index');
 
-Route::get('article/{article}', [ArticleController::class, 'show'])->name('article.show');
+Route::get('header-category/{slug}', [CategoryCatalogController::class, 'show'])->name('category.show');
+
+Route::get('article/{slug}', [ArticleController::class, 'show'])->name('article.show');
 
 require __DIR__.'/auth.php';

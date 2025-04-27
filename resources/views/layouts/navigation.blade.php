@@ -12,7 +12,7 @@
                 </a>
             </div>
 
-            @if (request()->routeIs('category.show'))
+            @if (request()->routeIs('category.index'))
                 <div class="text-logo font-semibold text-3xl ml-2 mr-1"> / </div>
 
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"

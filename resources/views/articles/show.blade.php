@@ -1,4 +1,9 @@
-<h2>Обговорення</h2>
+<x-app-layout>
+    @if (session('success'))
+        <x-pop-up message="{{ session('success') }}" />
+    @endif
+
+    <h2>Обговорення</h2>
 
 @foreach($article->comments as $comment)
     <div class="comment">
@@ -52,3 +57,5 @@
         <button type="submit">👎</button>
     </form>
 @endauth
+
+</x-app-layout>

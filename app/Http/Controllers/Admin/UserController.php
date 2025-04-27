@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         $this->authorize('isAdmin', User::class);
 
-        $query = User::query();
+        $query = User::query()->where('id', '!=', auth()->id());
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');

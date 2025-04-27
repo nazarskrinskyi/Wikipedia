@@ -238,8 +238,7 @@ const editorConfig = {
 ClassicEditor.create(document.querySelector("#editor"), editorConfig)
     .then((editor) => {
         editor.model.document.on("change:data", () => {
-            console.log(editor.getData());
-            document.querySelector("#description").value = editor.getData();
+            document.querySelector("#content").value = editor.getData();
         });
     })
     .catch((error) => console.error("CKEditor initialization error:", error));

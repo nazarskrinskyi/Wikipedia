@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $content
  * @property mixed $category_id
  * @property mixed $user_id
+ * @property mixed $description
  */
 class ArticleVersion extends Model
 {

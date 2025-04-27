@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
  * @property mixed $content
  * @property mixed $category_id
  * @property mixed $user_id
+ * @property mixed $description
  * @method static latest()
  * @method static create(array $validated)
  * @method static withCount(array $array)

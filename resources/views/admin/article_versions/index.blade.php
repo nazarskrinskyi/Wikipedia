@@ -7,6 +7,9 @@
 @endsection
 
 @section('content')
+    @if (session('success'))
+        <x-pop-up message="{{ session('success') }}" />
+    @endif
     <div class="container">
         <form method="GET" action="{{ route('articles-versions.filter') }}" class="mb-4">
             <div class="row">
@@ -39,7 +42,7 @@
                             <a href="{{ route('articles-versions.show', $article->id) }}" class="btn btn-sm btn-warning">Показати</a>
                             <form action="{{ route('articles-versions.restore', $article->id) }}" method="POST" class="d-inline">
                                 @csrf
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Ви впевнені?')">Відновити</button>
+                                <button class="btn btn-sm btn-success" onclick="return confirm('Ви впевнені?')">Відновити</button>
                             </form>
                             <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="d-inline">
                                 @csrf
@@ -53,7 +56,7 @@
             </table>
 
             <div class="mt-3">
-                {{ $versions->appends(['search' => $search])->links() }}
+                {{ $versions->appends(['search' => $search ?? ''])->links() }}
             </div>
         @else
             <p>Версій не знайдено.</p>

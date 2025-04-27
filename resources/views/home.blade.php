@@ -4,9 +4,9 @@
             <x-footer/>
         </x-slot>
 
-        {{-- @if (session('success'))
+         @if (session('success'))
             <x-pop-up message="{{ session('success') }}" />
-        @endif --}}
+        @endif
         @foreach($categories as $category)
             <a href="{{ route('category.show', $category->slug) }}"
                class="mb-4 text-blue-500 dark:text-blue-300 inline-flex items-center px-1 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-lg ">
@@ -23,7 +23,7 @@
             <ul class="grid grid-cols-3 gap-4 mb-5">
                 @foreach($category->children as $child)
                     <li>
-                        <a href="{{ route('category.show', $child->slug) }}">
+                        <a href="{{ route('category.index', $child->slug) }}">
                             <x-guide-card
                                 :image="$child->preview_path"
                                 :title="$child->name"

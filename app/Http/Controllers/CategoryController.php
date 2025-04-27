@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    use AuthorizesRequests;
-
-    public function showCategory(string $slug): View|RedirectResponse
+    public function show(string $slug): View
     {
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        if ($category->parent === null || $category->children()->count() === 0) {
+        return view('category.show', compact('category'));
+    }
+
+    public function index(string $slug): View
+    {
+        $category = Category::where('slug', $slug)->with('articles')->firstOrFail();
+
+        if ($category->parent === null || $category->children()->count() !== 0) {
             abort(404);
         }
 
