@@ -18,7 +18,7 @@ class CategoryController extends Controller
     {
         $category = Category::where('slug', $slug)->with('articles')->firstOrFail();
 
-        if ($category->parent === null || $category->children()->count() !== 0) {
+        if ($category->parent === null) {
             abort(404);
         }
 

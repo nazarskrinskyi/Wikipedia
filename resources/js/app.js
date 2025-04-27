@@ -83,6 +83,7 @@ const {
     Strikethrough,
     Superscript,
     MediaEmbed,
+    CodeBlock,
 } = window.CKEDITOR;
 
 const LICENSE_KEY =
@@ -91,6 +92,9 @@ const LICENSE_KEY =
 const editorConfig = {
     toolbar: {
         items: [
+            "undo",
+            "redo",
+            "codeBlock",
             "heading",
             "|",
             "bold",
@@ -164,6 +168,7 @@ const editorConfig = {
         Subscript,
         Superscript,
         MediaEmbed,
+        CodeBlock,
     ],
     language: "uk",
     licenseKey: LICENSE_KEY,

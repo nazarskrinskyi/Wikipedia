@@ -82,7 +82,7 @@ class ArticleController extends Controller
 
         $article = Article::create($this->validateArticle($request));
 
-        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття створена!');
+        return redirect()->route('home.index')->with('success', 'Стаття створена!');
     }
 
     public function random(): RedirectResponse
@@ -91,7 +91,7 @@ class ArticleController extends Controller
 
         return $article
             ? redirect()->route('articles.show', $article)
-            : redirect()->route('home')->with('error', 'Немає статей.');
+            : redirect()->route('home.index')->with('error', 'Немає статей.');
     }
 
     public function popular(): View
@@ -148,7 +148,7 @@ class ArticleController extends Controller
 
         $article->update($validated);
 
-        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття оновлена!');
+        return redirect()->route('home.index')->with('success', 'Стаття оновлена!');
     }
 
     /**

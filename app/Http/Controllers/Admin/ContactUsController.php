@@ -34,6 +34,6 @@ class ContactUsController extends Controller
 
         ContactUs::create($validated);
 
-        return redirect()->route('home')->with('success', 'Дякуємо за повідомлення!');
+        return redirect()->route('home.index')->with('success', 'Дякуємо за повідомлення!');
     }
 }
