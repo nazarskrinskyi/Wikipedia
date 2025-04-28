@@ -33,6 +33,7 @@ $updatedContent = preg_replace('~^
 ?>
 
 <x-app-layout>
+
     <div class="gap-6 py-12 container mx-auto max-w-7xl flex flex-grow relative ">
         <x-slot name="footer">
             <x-footer />
@@ -80,7 +81,7 @@ $updatedContent = preg_replace('~^
             <h2 id='{{ $article->slug }}' class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">
                 {{ $article->title }}
             </h2>
-            <div class='text-black dark:text-white'>
+            <div class='text-black dark:text-white ck-content'>
                 {!! $updatedContent !!}
             </div>
         </div>
@@ -108,10 +109,9 @@ $updatedContent = preg_replace('~^
                 @endforeach
             </ul>
         </aside>
-
     </div>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.2.1/ckeditor5.css" crossorigin>
 </x-app-layout>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const sections = document.querySelectorAll("li[id]");

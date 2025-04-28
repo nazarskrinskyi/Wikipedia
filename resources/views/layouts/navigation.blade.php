@@ -41,7 +41,7 @@
                 </div>
             @endif
         </div>
-        <div class='flex items-center self-center max-w-2xl flex-grow relative z-50 mx-1'>
+        <div class='flex items-center self-center max-w-2xl flex-grow relative z-50 mx-2'>
             <x-search-input placeholder="Пошук по wiki" />
 
             {{-- Search Results --}}
@@ -54,16 +54,16 @@
         @if (Route::has('login'))
             <div class=" flex justify-end items-center">
                 @auth
-                    @if(auth()->user()->role != 'user')
+                    @if (auth()->user()->role != 'user')
                         <a href="{{ url('/admin') }}"
-                           class="rounded-md  px-3 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                            class="rounded-md  px-3 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                             Admin
                         </a>
                     @endif
-                        <a href="{{ route('articles.create') }}"
-                           class="pl-5 py-2 px-4 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] transition duration-300">
-                            Створити Статью
-                        </a>
+                    <a href="{{ route('articles.create') }}"
+                        class="pl-5 py-2 px-4 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] transition duration-300">
+                        Створити Статью
+                    </a>
                 @else
                     <a href="{{ route('login') }}"
                         class="rounded-md pl-8 px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
