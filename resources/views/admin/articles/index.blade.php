@@ -62,7 +62,7 @@
             </table>
 
             <div class="mt-3">
-                {{ $articles->appends(request()->query())->links() }}
+                {{ $articles->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
         @else
             <p>Статтей не знайдено.</p>

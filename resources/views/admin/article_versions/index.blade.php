@@ -56,7 +56,7 @@
             </table>
 
             <div class="mt-3">
-                {{ $versions->appends(['search' => $search ?? ''])->links() }}
+                {{ $versions->appends(['search' => $search ?? ''])->links('pagination::bootstrap-5') }}
             </div>
         @else
             <p>Версій не знайдено.</p>

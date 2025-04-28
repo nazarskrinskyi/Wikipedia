@@ -80,9 +80,9 @@ class ArticleController extends Controller
     {
         $this->authorize('create', Article::class);
 
-        Article::create($this->validateArticle($request));
+        $article = Article::create($this->validateArticle($request));
 
-        return redirect()->route('home.index')->with('success', 'Стаття створена!');
+        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття створена!');
     }
 
     public function random(): RedirectResponse
@@ -108,9 +108,13 @@ class ArticleController extends Controller
         return view('articles.popular', compact('articles'));
     }
 
-    public function show(string $slug): View
+    public function show(string $slug): View|RedirectResponse
     {
         $article = Article::where('slug', $slug)->firstOrFail();
+
+        if (!$article->approved) {
+            return redirect()->route('home.index');
+        }
 
         $category = $article->category;
 
@@ -163,7 +167,7 @@ class ArticleController extends Controller
             $article->save();
         }
 
-        return redirect()->route('home.index')->with('success', 'Стаття оновлена!');
+        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття оновлена!');
     }
 
     /**
