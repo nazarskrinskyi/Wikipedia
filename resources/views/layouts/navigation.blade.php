@@ -60,10 +60,9 @@
                             Admin
                         </a>
                     @endif
-                    <a href="{{ route('articles.create') }}"
-                        class="pl-5 py-2 px-4 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-200 hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] transition duration-300">
-                        Створити Статью
-                    </a>
+                    <x-primary-button>
+                        <a href="{{ route('articles.create') }}"> Створити Статью </a>
+                    </x-primary-button>
                 @else
                     <a href="{{ route('login') }}"
                         class="rounded-md pl-8 px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">

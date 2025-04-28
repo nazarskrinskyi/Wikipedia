@@ -7,16 +7,18 @@ $aTags = $dom->getElementsByTagName('a');
 
 $headings = [];
 foreach ($aTags as $a) {
-    $id = $a->getAttribute('id');
-    $text = trim($a->textContent);
+$id = $a->getAttribute('id');
+$text = trim($a->textContent);
 
-    if ($id && $text === '') {
-        $headings[] = ['id' => $id,];
-    }
+if ($id && $text === '') {
+$headings[] = ['id' => $id,];
+}
 }
 
 $updatedContent = $dom->saveHTML($dom->getElementsByTagName('body')->item(0));
-$updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
+$updatedContent = preg_replace('~^
+
+<body>|</body>$~', '', $updatedContent);
 ?>
 
 <x-app-layout>
@@ -31,12 +33,12 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
                 <div class="relative overflow-hidden">
 
                     <div class="rounded-sm absolute inset-0  transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                         style="background: linear-gradient(to top right, {{ $parentCategory->from_color }}, {{ $parentCategory->to_color }});">
+                        style="background: linear-gradient(to top right, {{ $parentCategory->from_color }}, {{ $parentCategory->to_color }});">
                     </div>
 
                     <div class="relative z-10">
                         <img class="w-5 h-5" src="{{ asset('uploads/' . $parentCategory->preview_path) }}"
-                             alt="{{ $parentCategory->name }}">
+                            alt="{{ $parentCategory->name }}">
                     </div>
 
                 </div>
@@ -51,7 +53,7 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
                                 @foreach ($child->articles as $currentArticle)
                                     <li
                                         class='hover:text-sky-500 {{ $currentArticle->id == $article->id ? 'text-sky-500 font-semibold' : '' }}'>
-                                        <a href="{{ route('article.show', $currentArticle->slug) }}" class="aside-link">
+                                        <a href="{{ route('article.show', $currentArticle->slug) }}">
                                             <span>{{ $currentArticle->title }}</span>
                                         </a>
                                     </li>
@@ -63,11 +65,11 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
             </ul>
         </aside>
 
-        <div class='max-w-5xl w-full'>
+        <div class='max-w-5xl w-full '>
             <h2 id='{{ $article->slug }}' class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">
                 {{ $article->title }}
             </h2>
-            <div class='text-black dark:text-white'>
+            <div class='text-black dark:text-white bg-white dark:bg-black content'>
                 {!! $updatedContent !!}
             </div>
         </div>
@@ -77,7 +79,7 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
             <button class='bg-gray-100 dark:bg-gray-800 p-2 rounded-lg cursor-default'>
                 {!! file_get_contents(public_path('images/toggle.svg')) !!}
             </button>
-            <ul
+            <ul id='bookmarks'
                 class='mt-4 ml-2 space-y-2 text-gray-600 dark:text-gray-400 max-h-[calc(100vh-23rem)] overflow-y-auto scrollbar-dark'>
                 @foreach ($headings as $heading)
                     <li class='hover:text-sky-500'>
@@ -91,13 +93,167 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
         </aside>
 
     </div>
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.2.1/ckeditor5.css" crossorigin>
 </x-app-layout>
+
+<style>
+    /* Базовые отступы и ширина */
+    .content {
+        line-height: 1.7;
+        font-size: 1.05rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    }
+
+    /* Заголовки */
+    .content h1,
+    .content h2,
+    .content h3,
+    .content h4,
+    .content h5,
+    .content h6 {
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .content h1 {
+        font-size: 2rem;
+    }
+
+    .content h2 {
+        font-size: 1.75rem;
+    }
+
+    .content h3 {
+        font-size: 1.5rem;
+    }
+
+    .content h4 {
+        font-size: 1.25rem;
+    }
+
+    .content h5 {
+        font-size: 1.1rem;
+    }
+
+    .content h6 {
+        font-size: 1rem;
+    }
+
+    /* Параграфы */
+    .content p {
+        margin: 1em 0;
+    }
+
+    /* Блок кода */
+    .content pre {
+        background: #f5f5f5;
+        padding: 1em;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 0.95rem;
+    }
+
+    .content code {
+        background: #f5f5f5;
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    /* Блок цитат */
+    .content blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 1em;
+        color: #666;
+        margin: 1.5em 0;
+        font-style: italic;
+        background: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    /* Списки */
+    .content ul,
+    .content ol {
+        margin: 1em 0 1em 1.5em;
+    }
+
+    .content li {
+        margin-bottom: 0.5em;
+    }
+
+    /* Таблицы */
+    .content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5em 0;
+        font-size: 0.95rem;
+    }
+
+    .content th,
+    .content td {
+        border: 1px solid #ddd;
+        padding: 0.75em 1em;
+        text-align: left;
+    }
+
+    .content thead {
+        background: #f5f5f5;
+    }
+
+    /* Картинки */
+    .content img {
+        max-width: 100%;
+        height: auto;
+        margin: 1em 0;
+        border-radius: 8px;
+    }
+
+    /* Горизонтальная линия */
+    .content hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 2em 0;
+    }
+
+    /* Адаптация под тёмную тему */
+    @media (prefers-color-scheme: dark) {
+
+        .content pre,
+        .content code {
+            background: #2d2d2d;
+            color: #ffffff;
+        }
+
+        .content blockquote {
+            background: #2d2d2d;
+            border-left-color: #555;
+            color: #bbb;
+        }
+
+        .content table th,
+        .content table td {
+            border-color: #444;
+        }
+
+        .content thead {
+            background: #333;
+        }
+
+        .content hr {
+            border-top-color: #444;
+        }
+    }
+</style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const sections = document.querySelectorAll("li[id]");
-        const navLinks = document.querySelectorAll(".aside-link");
+        const bookmarks = document.getElementById('bookmarks');
+        const navLinks = bookmarks.querySelectorAll(".aside-link");
+        const sections = document.querySelector('.content').querySelectorAll("a[id]");
 
+        console.log(bookmarks);
 
         function activateLink() {
             let index = sections.length;

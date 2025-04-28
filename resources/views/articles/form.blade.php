@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg mt-10">
+    <div class="max-w-3xl w-full mx-auto p-6 bg-white dark:bg-gray-800 shadow-md rounded-lg mt-10">
         <form action="{{ isset($article) ? route('articles.update', $article) : route('articles.store') }}"
             method="POST">
             @csrf
