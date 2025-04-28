@@ -11,14 +11,13 @@
                     <x-application-logo class="block h-9 w-auto fill-current" />
                 </a>
             </div>
-
-            @if (request()->routeIs('category.index'))
+            @if ($currentCategory)
                 <div class="text-logo font-semibold text-3xl ml-2 mr-1"> / </div>
 
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
                     class="hidden text-logo sm:flex items-center px-1 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg ">
                     <a class="font-semibold text-3xl">
-                        front-end
+                        {{ $currentCategory->name }}
                     </a>
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 10 6">
