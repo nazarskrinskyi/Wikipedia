@@ -1,35 +1,22 @@
 <?php
-// Парсимо контент
 $dom = new DOMDocument();
 libxml_use_internal_errors(true);
 $dom->loadHTML('<?xml encoding="utf-8" ?>' . $article->content);
-libxml_clear_errors();
 
-$h2Elements = $dom->getElementsByTagName('h2');
+$aTags = $dom->getElementsByTagName('a');
 
 $headings = [];
+foreach ($aTags as $a) {
+    $id = $a->getAttribute('id');
+    $text = trim($a->textContent);
 
-$counter = 1;
-
-foreach ($h2Elements as $h2) {
-if (!$h2->hasAttribute('id')) {
-$id = 'section-' . $counter++;
-$h2->setAttribute('id', $id);
-} else {
-$id = $h2->getAttribute('id');
-}
-
-$headings[] = [
-'text' => trim($h2->textContent),
-'id' => $id,
-];
+    if ($id && $text === '') {
+        $headings[] = ['id' => $id,];
+    }
 }
 
 $updatedContent = $dom->saveHTML($dom->getElementsByTagName('body')->item(0));
-
-$updatedContent = preg_replace('~^
-
-<body>|</body>$~', '', $updatedContent);
+$updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
 ?>
 
 <x-app-layout>
@@ -93,17 +80,11 @@ $updatedContent = preg_replace('~^
             </button>
             <ul
                 class='mt-4 ml-2 space-y-2 text-gray-600 dark:text-gray-400 max-h-[calc(100vh-23rem)] overflow-y-auto scrollbar-dark'>
-                <li class='hover:text-sky-500'>
-                    <a href="# {{ $article->slug }}" class="aside-link">
-                        <span>1.</span>
-                        <span>{{ $article->title }}</span>
-                    </a>
-                </li>
                 @foreach ($headings as $heading)
                     <li class='hover:text-sky-500'>
                         <a href="#{{ $heading['id'] }}" class="aside-link">
-                            <span>{{ $loop->iteration + 1 }}.</span>
-                            <span>{{ $heading['text'] }}</span>
+                            <span>{{ $loop->iteration }}.</span>
+                            <span>{{ $heading['id'] }}</span>
                         </a>
                     </li>
                 @endforeach
@@ -135,10 +116,7 @@ $updatedContent = preg_replace('~^
 </script>
 
 
-
-
-
-{{-- 
+{{--
     <h2>Обговорення</h2>
 @foreach ($article->comments as $comment)
     <div class="comment">
