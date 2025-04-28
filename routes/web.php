@@ -55,6 +55,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
     Route::get('articles-versions/filter', [ArticleVersionController::class, 'filterArticles'])->name('articles-versions.filter');
+    Route::delete('articles-versions/delete', [ArticleVersionController::class, 'destroy'])->name('articles-versions.destroy');
     Route::get('articles-versions/{version}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
     Route::post('articles-versions/{version}', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
 

@@ -16,6 +16,13 @@ class ArticleVersionController extends Controller
         return view('admin.article_versions.index', compact('versions'));
     }
 
+    public function destroy(ArticleVersion $version): RedirectResponse
+    {
+        $version->delete();
+
+        return redirect()->back()->with('success', 'Версія статті видалена!');
+    }
+
     public function filterArticles(Request $request): View
     {
         $search = $request->get('search');

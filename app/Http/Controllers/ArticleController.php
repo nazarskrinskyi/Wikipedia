@@ -80,7 +80,7 @@ class ArticleController extends Controller
     {
         $this->authorize('create', Article::class);
 
-        $article = Article::create($this->validateArticle($request));
+        Article::create($this->validateArticle($request));
 
         return redirect()->route('home.index')->with('success', 'Стаття створена!');
     }
@@ -140,13 +140,21 @@ class ArticleController extends Controller
 
         $validated = $this->validateArticle($request);
 
-        if ($article->isDirty($validated)) {
-            ArticleVersion::create($article->only([
-                'id as article_id', 'title', 'slug', 'content', 'description', 'category_id', 'user_id'
-            ]));
-        }
+        $article->fill($validated);
 
-        $article->update($validated);
+        if ($article->isDirty()) {
+            ArticleVersion::create([
+                'article_id' => $article->id,
+                'title' => $article->getOriginal('title'),
+                'slug' => $article->getOriginal('slug'),
+                'content' => $article->getOriginal('content'),
+                'description' => $article->getOriginal('description'),
+                'category_id' => $article->getOriginal('category_id'),
+                'user_id' => $article->getOriginal('user_id'),
+            ]);
+
+            $article->save();
+        }
 
         return redirect()->route('home.index')->with('success', 'Стаття оновлена!');
     }

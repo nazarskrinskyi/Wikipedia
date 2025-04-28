@@ -44,7 +44,7 @@
                                 @csrf
                                 <button class="btn btn-sm btn-success" onclick="return confirm('Ви впевнені?')">Відновити</button>
                             </form>
-                            <form action="{{ route('articles.destroy', $article->id) }}" method="POST" class="d-inline">
+                            <form action="{{ route('articles-versions.destroy', $article->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Ви впевнені?')">Видалити</button>
