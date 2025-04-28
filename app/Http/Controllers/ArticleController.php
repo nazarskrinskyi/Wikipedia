@@ -112,6 +112,13 @@ class ArticleController extends Controller
     {
         $article = Article::where('slug', $slug)->firstOrFail();
 
+        $category = $article->category;
+
+        $parentCategory = null;
+        if ($category) {
+            $parentCategory = $category->parent;
+        }
+
         $ip = request()->ip();
         if (!ArticleView::where('article_id', $article->id)->where('ip', $ip)->whereDate('created_at', today())->exists()) {
             ArticleView::create([
@@ -122,7 +129,7 @@ class ArticleController extends Controller
 
         $article->content = TextHelper::parseInternalLinks($article->content);
 
-        return view('articles.show', compact('article'));
+        return view('articles.show', compact('article', 'category', 'parentCategory'));
     }
 
     public function edit(Article $article): View
