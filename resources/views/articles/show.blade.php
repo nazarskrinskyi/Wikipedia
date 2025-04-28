@@ -20,7 +20,6 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
 ?>
 
 <x-app-layout>
-
     <div class="gap-6 py-12 container mx-auto max-w-7xl flex flex-grow relative ">
         <x-slot name="footer">
             <x-footer />
@@ -32,12 +31,12 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
                 <div class="relative overflow-hidden">
 
                     <div class="rounded-sm absolute inset-0  transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                        style="background: linear-gradient(to top right, {{ $parentCategory->from_color }}, {{ $parentCategory->to_color }});">
+                         style="background: linear-gradient(to top right, {{ $parentCategory->from_color }}, {{ $parentCategory->to_color }});">
                     </div>
 
                     <div class="relative z-10">
                         <img class="w-5 h-5" src="{{ asset('uploads/' . $parentCategory->preview_path) }}"
-                            alt="{{ $parentCategory->name }}">
+                             alt="{{ $parentCategory->name }}">
                     </div>
 
                 </div>
@@ -68,7 +67,7 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
             <h2 id='{{ $article->slug }}' class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">
                 {{ $article->title }}
             </h2>
-            <div class='text-black dark:text-white ck-content'>
+            <div class='text-black dark:text-white'>
                 {!! $updatedContent !!}
             </div>
         </div>
@@ -90,9 +89,10 @@ $updatedContent = preg_replace('~^<body>|</body>$~', '', $updatedContent);
                 @endforeach
             </ul>
         </aside>
+
     </div>
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.2.1/ckeditor5.css" crossorigin>
 </x-app-layout>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const sections = document.querySelectorAll("li[id]");
