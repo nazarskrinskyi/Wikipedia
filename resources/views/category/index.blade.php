@@ -1,16 +1,16 @@
 <x-app-layout>
     <div class="gap-6 py-12 container mx-auto max-w-7xl flex flex-grow relative ">
         <x-slot name="footer">
-            <x-footer/>
+            <x-footer />
         </x-slot>
 
         <aside class='max-w-xl w-1/4 sticky top-[5rem] max-h-[calc(100vh-20rem)]'>
 
-            <button class='bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
+            <button class='bg-gray-100 dark:bg-gray-800 p-2 rounded-lg cursor-default'>
                 {!! file_get_contents(public_path('images/toggle.svg')) !!}
             </button>
             <ul
-                class='mt-4 ml-2 space-y-2 text-gray-400 dark:text-gray-600 max-h-[calc(100vh-23rem)] overflow-y-auto scrollbar-dark'>
+                class='mt-4 ml-2 space-y-2 text-gray-600 dark:text-gray-400 max-h-[calc(100vh-23rem)] overflow-y-auto scrollbar-dark'>
                 @foreach ($category->children as $child)
                     <li class='hover:text-sky-500'>
                         <a href="#{{ $child->slug }}" class="aside-link">
@@ -26,8 +26,7 @@
 
             <div class="relative overflow-hidden inline-block">
 
-                <div
-                    class="rounded-lg absolute inset-0  transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+                <div class="rounded-lg absolute inset-0  transition-opacity duration-300 opacity-100 group-hover:opacity-0"
                     style="background: linear-gradient(to top right, {{ $category->from_color }}, {{ $category->to_color }});">
                 </div>
 
@@ -37,7 +36,7 @@
 
                 <div class="relative z-10">
                     <img class="w-16 h-16" src="{{ asset('uploads/' . $category->preview_path) }}"
-                         alt="{{ $category->name }}">
+                        alt="{{ $category->name }}">
                 </div>
 
             </div>
@@ -46,7 +45,7 @@
 
             <ul>
                 @foreach ($category->articles as $article)
-                    @if($article->approved)
+                    @if ($article->approved)
                         <li class='mb-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
                             <h7 class="relative mb-2 text-lg text-sky-500 font-semibold">
                                 {{ $article->title }}
@@ -64,15 +63,18 @@
                             {{ $child->name }}</h6>
                         <ul>
                             @foreach ($child->articles as $article)
-                                @if($article->approved)
-                                    <li class='mb-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg'>
-                                        <h7 class="relative mb-2 text-lg text-sky-500 font-semibold">
-                                            {{ $article->title }}
-                                        </h7>
-                                        <p class='text-md text-gray-900 dark:text-white'>
-                                            {!! htmlspecialchars($article?->description) !!}
-                                        </p>
-                                    </li>
+                                @if ($article->approved)
+                                    <a href="{{ route('article.show', $article->slug) }}">
+                                        <li
+                                            class='mb-4 bg-gray-100 dark:bg-gray-800 p-2 rounded-lg hover:opacity-75 transition-opacity duration-300'>
+                                            <h7 class="relative mb-2 text-lg text-sky-500 font-semibold">
+                                                {{ $article->title }}
+                                            </h7>
+                                            <p class='text-md text-gray-900 dark:text-white'>
+                                                {!! htmlspecialchars($article?->description) !!}
+                                            </p>
+                                        </li>
+                                    </a>
                                 @endif
                             @endforeach
                         </ul>
@@ -85,17 +87,14 @@
 </x-app-layout>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const sections = document.querySelectorAll("li[id]");
         const navLinks = document.querySelectorAll(".aside-link");
-
-        console.log(sections[0].offsetTop);
 
         function activateLink() {
             let index = sections.length;
 
-            while (--index >= 0 && window.scrollY + 100 < sections[index].offsetTop) {
-            }
+            while (--index >= 0 && window.scrollY + 100 < sections[index].offsetTop) {}
 
             navLinks.forEach((link) => link.classList.remove("text-sky-500", "font-semibold"));
             if (navLinks[index]) {
