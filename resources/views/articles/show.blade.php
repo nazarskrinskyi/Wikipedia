@@ -82,7 +82,7 @@ $updatedContent = preg_replace('~^
             </div>
 
 
-            <div class='text-black dark:text-white bg-white dark:bg-black content'>
+            <div class='text-black dark:text-white bg-white dark:bg-black ck-content'>
                 {!! $updatedContent !!}
             </div>
         </div>

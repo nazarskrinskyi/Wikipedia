@@ -18,9 +18,7 @@ class ArticleVersionController extends Controller
 
     public function destroy(ArticleVersion $version): RedirectResponse
     {
-        $version->delete();
-
-        dd($version);
+        $version->forceDelete();
 
         return redirect()->back()->with('success', 'Версія статті видалена!');
     }

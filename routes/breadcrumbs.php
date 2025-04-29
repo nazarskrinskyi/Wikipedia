@@ -18,7 +18,7 @@ Breadcrumbs::for('category', function (BreadcrumbTrail $trail, Category $categor
         $trail->push($ancestor->name, route('category.index', $ancestor->slug));
     }
 
-    $trail->push($original->name, route('category.index', $original->slug));
+    $trail->push($original->name, route('category.index', $original->slug) . '#' . $original->slug);
 });
 
 Breadcrumbs::for('article', function (BreadcrumbTrail $trail, $article) {
