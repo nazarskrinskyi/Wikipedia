@@ -20,6 +20,8 @@ class ArticleVersionController extends Controller
     {
         $version->delete();
 
+        dd($version);
+
         return redirect()->back()->with('success', 'Версія статті видалена!');
     }
 

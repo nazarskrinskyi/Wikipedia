@@ -185,34 +185,44 @@
 
     function showSearchResults(data) {
         const searchResults = document.getElementById('search-results');
-        if (data) {
-            searchResults.style.display = 'block';
-            searchResults.innerHTML = '';
-            if (data.length > 0) {
-                for (let i = 0; i < data.length; i++) {
-                    const location = data[i];
-                    const locationLink = document.createElement('a');
-                    locationLink.href = '/location/' + location.id;
-                    locationLink.textContent = location.name;
-                    locationLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'hover:bg-gray-100',
-                        'dark:text-gray-200', 'dark:hover:bg-gray-600');
-                    searchResults.appendChild(locationLink);
-                }
+        searchResults.innerHTML = '';
 
-            } else {
-                const searchResult = document.createElement('span');
-                searchResult.textContent = 'Нічого не знайдено';
-                searchResult.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'dark:text-gray-200');
-                searchResults.appendChild(searchResult);
-            }
-        } else {
-            searchResults.style.display = 'none';
+        if (!data || (data.articles.length === 0 && data.categories.length === 0)) {
+            const noResult = document.createElement('span');
+            noResult.textContent = 'Нічого не знайдено';
+            noResult.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'dark:text-gray-200');
+            searchResults.appendChild(noResult);
+            searchResults.style.display = 'block';
+            return;
         }
 
+        searchResults.style.display = 'block';
+
+        if (data.articles && data.articles.length > 0) {
+            data.articles.forEach(article => {
+                const articleLink = document.createElement('a');
+                articleLink.href = '/article/' + article.slug;
+                articleLink.textContent = article.title;
+                articleLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'hover:bg-gray-100',
+                    'dark:text-gray-200', 'dark:hover:bg-gray-600');
+                searchResults.appendChild(articleLink);
+            });
+        }
+
+        if (data.categories && data.categories.length > 0) {
+            data.categories.forEach(category => {
+                const categoryLink = document.createElement('a');
+                categoryLink.href = '/category/' + category.slug;
+                categoryLink.textContent = category.name;
+                categoryLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-blue-600', 'hover:bg-gray-100',
+                    'dark:text-blue-400', 'dark:hover:bg-gray-600');
+                searchResults.appendChild(categoryLink);
+            });
+        }
     }
 
     async function fetchSearchResults(query) {
-        const result = await axios.post("/location/find-by-name", {
+        const result = await axios.post("/search", {
             query: query,
         });
 

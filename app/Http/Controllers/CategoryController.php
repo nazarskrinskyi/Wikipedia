@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -14,12 +15,16 @@ class CategoryController extends Controller
         return view('category.show', compact('category'));
     }
 
-    public function index(string $slug): View
+    public function index(string $slug): View|RedirectResponse
     {
         $category = Category::where('slug', $slug)->with('articles')->firstOrFail();
 
         if ($category->parent === null) {
-            abort(404);
+            return redirect()->route('category.show', $category->slug);
+        }
+
+        if ($category->children->count() === 0) {
+            return redirect()->route('category.index', $category->parent->slug);
         }
 
         $parentCategories = $category->getParentHierarchy();

@@ -3,6 +3,7 @@
         <x-slot name="footer">
             <x-footer />
         </x-slot>
+        {{ Breadcrumbs::render('category', $category) }}
 
         <aside class='max-w-xl w-1/4 sticky top-[5rem] max-h-[calc(100vh-20rem)]'>
 

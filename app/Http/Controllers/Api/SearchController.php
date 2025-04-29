@@ -12,14 +12,14 @@ class SearchController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        $query = $request->input('q');
+        $query = $request->input('query');
 
         if (!$query) {
             return response()->json(['error' => 'Search query is required.'], 400);
         }
 
         $articles = Article::where('title', 'LIKE', '%' . $query . '%')
-            ->andWhere('approved', true)
+            ->where('approved', true)
             ->with('category:id,name,slug')
             ->get(['id', 'title', 'slug', 'category_id']);
 

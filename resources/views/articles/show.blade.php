@@ -66,6 +66,15 @@ $updatedContent = preg_replace('~^
         </aside>
 
         <div class='max-w-5xl w-full '>
+            {{ Breadcrumbs::render('article', $article) }}
+
+            @auth()
+                @if(auth()->user()->id == $article->user_id || auth()->user()->role != 'user')
+                    <x-primary-button class="mb-3">
+                        <a href="{{ route('articles.edit', $article) }}"> Редагувати статтю </a>
+                    </x-primary-button>
+                @endif
+            @endauth
             <h2 id='{{ $article->slug }}' class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">
                 {{ $article->title }}
             </h2>

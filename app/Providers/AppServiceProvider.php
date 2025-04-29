@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
@@ -29,22 +30,18 @@ class AppServiceProvider extends ServiceProvider
             $categories = Category::with('children')->whereNull('parent_id')->get();
             view()->share('categories', $categories);
 
-            $path = Request::path();
-            $segments = explode('/', $path);
-
-            $slug = $segments[1] ?? null;
+            $slug = Request::segment(2);
             $currentRootCategory = null;
 
             if ($slug) {
-                $category = Category::where('slug', $slug)->first();
+                $category = Category::where('slug', $slug)->first()
+                    ?? Article::where('slug', $slug)->with('category.parent')->first()?->category;
 
-                if ($category) {
-                    while ($category->parent_id !== null) {
-                        $category = $category->parent;
-                    }
-
-                    $currentRootCategory = $category;
+                while ($category && $category->parent_id) {
+                    $category = $category->parent;
                 }
+
+                $currentRootCategory = $category;
             }
 
             view()->share('currentCategory', $currentRootCategory);
