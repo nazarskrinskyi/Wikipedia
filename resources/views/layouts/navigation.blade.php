@@ -187,7 +187,8 @@
         const searchResults = document.getElementById('search-results');
         searchResults.innerHTML = '';
 
-        if (!data || (data.articles.length === 0 && data.categories.length === 0)) {
+        // если ничего нет — скрываем
+        if (!data || (!data.articles.length && !data.categories.length)) {
             const noResult = document.createElement('span');
             noResult.textContent = 'Нічого не знайдено';
             noResult.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'dark:text-gray-200');
@@ -198,24 +199,24 @@
 
         searchResults.style.display = 'block';
 
-        if (data.articles && data.articles.length > 0) {
+        if (data.articles.length > 0) {
             data.articles.forEach(article => {
                 const articleLink = document.createElement('a');
                 articleLink.href = '/article/' + article.slug;
                 articleLink.textContent = article.title;
-                articleLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'hover:bg-gray-100',
-                    'dark:text-gray-200', 'dark:hover:bg-gray-600');
+                articleLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700',
+                    'hover:bg-gray-100', 'dark:text-gray-200', 'dark:hover:bg-gray-600');
                 searchResults.appendChild(articleLink);
             });
         }
 
-        if (data.categories && data.categories.length > 0) {
+        if (data.categories.length > 0) {
             data.categories.forEach(category => {
                 const categoryLink = document.createElement('a');
                 categoryLink.href = '/category/' + category.slug;
                 categoryLink.textContent = category.name;
-                categoryLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-blue-600', 'hover:bg-gray-100',
-                    'dark:text-blue-400', 'dark:hover:bg-gray-600');
+                categoryLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-blue-600',
+                    'hover:bg-gray-100', 'dark:text-blue-400', 'dark:hover:bg-gray-600');
                 searchResults.appendChild(categoryLink);
             });
         }
@@ -223,35 +224,49 @@
 
     async function fetchSearchResults(query) {
         const result = await axios.post("/search", {
-            query: query,
+            query
         });
-
         return result.data;
     }
 
     const handleFetchSearchResults = debounce(async (query) => {
         try {
-            const data = await fetchSearchResults(query);
-
-            if (data) {
-                showSearchResults(data);
+            if (query.trim() === '') {
+                document.getElementById('search-results').innerHTML = '';
+                document.getElementById('search-results').style.display = 'none';
+                return;
             }
+
+            const data = await fetchSearchResults(query);
+            showSearchResults(data);
         } catch (error) {
             console.error('error ' + error);
         }
-    }, 500)
+    }, 500);
 
     function handleSearch(event) {
-        event.preventDefault();
-
         const query = event.currentTarget.value;
-        if (query !== '') {
-            handleFetchSearchResults(query);
-        } else {
-            showSearchResults(null);
-        }
+        handleFetchSearchResults(query);
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('default-search');
+        const results = document.getElementById('search-results');
+
+        input.addEventListener('blur', () => {
+            console.log('blur');
+
+            results.style.display = 'none';
+        });
+
+        input.addEventListener('focus', () => {
+            if (results.innerHTML.trim() !== '') {
+                results.style.display = 'block';
+            }
+        });
+    });
 </script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
