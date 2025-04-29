@@ -3,7 +3,7 @@
         <x-slot name="footer">
             <x-footer />
         </x-slot>
-        {{ Breadcrumbs::render('category', $category) }}
+
 
         <aside class='max-w-xl w-1/4 sticky top-[5rem] max-h-[calc(100vh-20rem)]'>
 
@@ -44,6 +44,7 @@
 
             <h5 class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">{{ $category->name }}</h5>
 
+            <div class="inline-block">{{ Breadcrumbs::render('category', $category) }}</div>
             <ul>
                 @foreach ($category->articles as $article)
                     @if ($article->approved)
