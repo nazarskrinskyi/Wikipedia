@@ -74,9 +74,8 @@ $updatedContent = preg_replace('~^
 
                 @auth()
                     @if (auth()->user()->id == $article->user_id || auth()->user()->role != 'user')
-                        <x-secondary-button class="flex-shrink-0">
-                            <a href="{{ route('articles.edit', $article) }}"> Редагувати статтю </a>
-                        </x-secondary-button>
+                        <x-secondary-link href="{{ route('articles.edit', $article) }}" class='px-4 py-2'> Редагувати
+                            статтю </x-secondary-link>
                     @endif
                 @endauth
             </div>
