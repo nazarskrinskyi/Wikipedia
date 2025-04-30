@@ -10,7 +10,7 @@
         <!-- Contact Information -->
         <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
             <p class="text-gray-800 dark:text-gray-200">
-                Якщо у вас є запитання, пропозиції або ви хочете долучитися до розвитку платформи WonderUA, зв'яжіться з
+                Якщо у вас є запитання, пропозиції або ви хочете долучитися до розвитку платформи ITWiki, зв'яжіться з
                 нами.
             </p>
         </div>

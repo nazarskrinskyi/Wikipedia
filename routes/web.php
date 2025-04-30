@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
+    Route::post('/send/contact-us', [ContactUsController::class, 'store'])->name('contact-us.upload');
 
     Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
     Route::get('articles-versions/filter', [ArticleVersionController::class, 'filterArticles'])->name('articles-versions.filter');
@@ -75,4 +76,12 @@ Route::get('header-category/{slug}', [CategoryCatalogController::class, 'show'])
 
 Route::get('article/{slug}', [ArticleController::class, 'show'])->name('article.show');
 
-require __DIR__.'/auth.php';
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+require __DIR__ . '/auth.php';
