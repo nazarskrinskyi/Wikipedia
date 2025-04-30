@@ -164,9 +164,7 @@ $updatedContent = preg_replace('~^
     document.addEventListener("DOMContentLoaded", function() {
         const bookmarks = document.getElementById('bookmarks');
         const navLinks = bookmarks.querySelectorAll(".aside-link");
-        const sections = document.querySelector('.content').querySelectorAll("a[id]");
-
-        console.log(bookmarks);
+        const sections = document.querySelector('.ck-content').querySelectorAll("a[id]");
 
         function activateLink() {
             let index = sections.length;
