@@ -1,7 +1,6 @@
-@extends('layouts.app')
+<x-app-layout>
 
-@section('content')
-    <h1>Популярні статті</h1>
+<h1>Популярні статті</h1>
 
     <ul>
         @foreach ($articles as $article)
@@ -12,4 +11,4 @@
             </li>
         @endforeach
     </ul>
-@endsection
+</x-app-layout>

@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Api\SearchController;
+use App\Http\Controllers\CategoryController as CategoryCatalogController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleLikeController;
@@ -9,7 +12,6 @@ use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
@@ -24,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/search', [SearchController::class, 'search']);
+Route::post('/search', [SearchController::class, 'search']);
 
 Route::post('/ckeditor/upload', [CKEditorUploadController::class, 'upload'])->name('ckeditor.upload');
 
@@ -33,11 +35,6 @@ Route::resource('articles', ArticleController::class);
 Route::resource('categories', CategoryController::class);
 
 Route::get('/articles/popular', [ArticleController::class, 'popular'])->name('articles.popular');
-
-Route::post('articles/{article}/approve', [ArticleController::class, 'approve'])->name('articles.approve')->middleware('can:approve-articles');
-
-Route::get('articles/{article}/versions', [ArticleVersionController::class, 'index'])->name('articles.versions');
-Route::post('articles/{article}/versions/{version}/restore', [ArticleVersionController::class, 'restore'])->name('articles.versions.restore');
 
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->middleware('auth')->name('comments.store');
 Route::patch('/comments/{comment}', [CommentController::class, 'update'])->middleware('auth')->name('comments.update');
@@ -48,9 +45,6 @@ Route::post('/articles/{article}/dislike', [ArticleLikeController::class, 'disli
 
 Route::get('/random', [ArticleController::class, 'random'])->name('articles.random');
 
-Route::get('/search', [SearchController::class, 'search'])->name('search');
-Route::get('/autocomplete', [SearchController::class, 'autocomplete'])->name('autocomplete');
-
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
@@ -58,8 +52,36 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
     Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
+    Route::post('/send/contact-us', [ContactUsController::class, 'store'])->name('contact-us.upload');
+
+    Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
+    Route::get('articles-versions/filter', [ArticleVersionController::class, 'filterArticles'])->name('articles-versions.filter');
+    Route::delete('articles-versions/delete', [ArticleVersionController::class, 'destroy'])->name('articles-versions.destroy');
+    Route::get('articles-versions/{version}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
+    Route::post('articles-versions/{version}', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
+
+    Route::get('articles-approve/', [ArticleController::class, 'index'])->name('articles-approve.index');
+    Route::get('articles-approve/filter', [ArticleController::class, 'filterArticles'])->name('articles-approve.filter');
+    Route::get('articles-approve/{article}', [ArticleController::class, 'showDetails'])->name('articles-approve.show');
+    Route::post('articles-approve/{article}', [ArticleController::class, 'approve'])->name('articles-approve.approve');
+
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('admin.users.show');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
 });
 
-Route::get('category/{slug}', [CategoryController::class, 'showCategory'])->name('category.show');
+Route::get('category/{slug}', [CategoryCatalogController::class, 'index'])->name('category.index');
 
-require __DIR__.'/auth.php';
+Route::get('header-category/{slug}', [CategoryCatalogController::class, 'show'])->name('category.show');
+
+Route::get('article/{slug}', [ArticleController::class, 'show'])->name('article.show');
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+require __DIR__ . '/auth.php';

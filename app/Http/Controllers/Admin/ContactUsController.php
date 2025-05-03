@@ -17,7 +17,7 @@ class ContactUsController extends Controller
         return view('admin.contact_us.index', compact('contactUsEntries'));
     }
 
-    public function show($id): View
+    public function show(int $id): View
     {
         $contactUsEntry = ContactUs::findOrFail($id);
 
@@ -34,6 +34,6 @@ class ContactUsController extends Controller
 
         ContactUs::create($validated);
 
-        return redirect()->route('home')->with('success', 'Дякуємо за повідомлення!');
+        return redirect()->route('home.index')->with('success', 'Дякуємо за повідомлення!');
     }
 }

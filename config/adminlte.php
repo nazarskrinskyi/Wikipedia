@@ -317,10 +317,25 @@ return [
             'icon' => 'fas fa-pencil-ruler',
         ],
         [
+            'text' => 'Апрув Статей',
+            'url' => 'admin/articles-approve/',
+            'icon' => 'fas fa-pencil-ruler',
+        ],
+        [
+            'text' => 'Версії статей',
+            'url' => 'admin/articles-versions/',
+            'icon' => 'fas fa-pencil-ruler',
+        ],
+        [
             'text' => 'Категорії',
             'url'  => 'categories',
             'icon' => 'fas fa-tags',
-        ] // optional icon
+        ],
+        [
+            'text' => 'Ролі Юзерів',
+            'url'  => 'admin/users',
+            'icon' => 'fas fa-tags',
+        ],
 //        ['header' => 'account_settings'],
 //        [
 //            'text' => 'profile',

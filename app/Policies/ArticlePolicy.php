@@ -31,6 +31,6 @@ class ArticlePolicy
 
     public function approve(User $user): bool
     {
-        return $user->isModerator();
+        return $user->isModerator() || $user->isAdmin();
     }
 }

@@ -8,7 +8,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -32,9 +31,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        if (!Auth::user()?->is_admin) {
-            $this->authorize('create', Category::class);
-        }
+        $this->authorize('create', Category::class);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
@@ -64,13 +61,6 @@ class CategoryController extends Controller
         return view('admin.category.form', compact('category'));
     }
 
-    public function showCategory(string $slug): View
-    {
-        $category = Category::where('slug', $slug)->firstOrFail();
-
-        return view('category', compact('category'));
-    }
-
     public function edit(Category $category): View
     {
         $categories = Category::where('id', '!=', $category->id)->get();
@@ -82,9 +72,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category): RedirectResponse
     {
-        if (!Auth::user()?->is_admin) {
-            $this->authorize('update', $category);
-        }
+        $this->authorize('update', $category);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
@@ -113,9 +101,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category): RedirectResponse
     {
-        if (!Auth::user()?->is_admin) {
-            $this->authorize('delete', $category);
-        }
+        $this->authorize('delete', $category);
 
         foreach ($category->children as $child) {
             $child->update(['parent_id' => null]);

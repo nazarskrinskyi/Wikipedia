@@ -17,16 +17,60 @@ class ArticleController extends Controller
 {
     use AuthorizesRequests;
 
+    private function getPendingCategories()
+    {
+        return Category::whereIn('id', function($query) {
+            $query->select('category_id')
+                ->from('articles')
+                ->where('approved', false);
+        })->get();
+    }
+
+    private function validateArticle(Request $request): array
+    {
+        return $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255',
+            'content' => 'required|string',
+            'description' => 'required|string',
+            'category_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
+        ]);
+    }
+
     public function index(): View
     {
-        $articles = Article::latest()->paginate(10);
-        return view('articles.index', compact('articles'));
+        $articles = Article::with('category')
+            ->where('approved', false)
+            ->latest()
+            ->paginate(10);
+
+        $categories = $this->getPendingCategories();
+
+        return view('admin.articles.index', compact('articles', 'categories'));
+    }
+
+    public function filterArticles(Request $request): View
+    {
+        $category = Category::find($request->get('category_id'));
+        $categories = $this->getPendingCategories();
+
+        $articles = $category
+            ? $category->articles()->where('approved', false)->latest()->paginate(10)
+            : Article::with('category')->where('approved', false)->latest()->paginate(10);
+
+        return view('admin.articles.index', compact('articles', 'categories'));
+    }
+
+    public function showDetails(Article $article): View
+    {
+        return view('admin.articles.show', compact('article'));
     }
 
     public function create(): View
     {
-        $categories = Category::all();
-        return view('articles.create', compact('categories'));
+        $categories = Category::whereNotNull('parent_id')->get();
+        return view('articles.form', compact('categories'));
     }
 
     /**
@@ -36,46 +80,50 @@ class ArticleController extends Controller
     {
         $this->authorize('create', Article::class);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'nullable|exists:categories,id',
-        ]);
+        $article = Article::create($this->validateArticle($request));
 
-        Article::create($validated);
-
-        return redirect()->route('articles.index')->with('success', 'Стаття створена!');
+        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття створена!');
     }
 
-    public function random()
+    public function random(): RedirectResponse
     {
         $article = Article::inRandomOrder()->first();
 
-        if ($article) {
-            return redirect()->route('articles.show', $article);
-        }
-
-        return redirect()->route('home')->with('error', 'Немає статей.');
+        return $article
+            ? redirect()->route('articles.show', $article)
+            : redirect()->route('home.index')->with('error', 'Немає статей.');
     }
 
     public function popular(): View
     {
-        $articles = Article::withCount(['views', 'likes' => function ($query) {
-            $query->where('is_like', true);
-        }])
+        $articles = Article::withCount([
+            'views',
+            'likes' => fn($query) => $query->where('is_like', true)
+        ])
             ->orderByDesc('views_count')
             ->orderByDesc('likes_count')
-            ->take(10) // Беремо топ-10
+            ->take(10)
             ->get();
 
         return view('articles.popular', compact('articles'));
     }
 
-    public function show(Article $article): View
+    public function show(string $slug): View|RedirectResponse
     {
-        $ip = request()->ip();
+        $article = Article::where('slug', $slug)->firstOrFail();
 
-        // Записуємо перегляд тільки якщо IP не записаний сьогодні
+        if (!$article->approved) {
+            return redirect()->route('home.index');
+        }
+
+        $category = $article->category;
+
+        $parentCategory = null;
+        if ($category) {
+            $parentCategory = $category->parent;
+        }
+
+        $ip = request()->ip();
         if (!ArticleView::where('article_id', $article->id)->where('ip', $ip)->whereDate('created_at', today())->exists()) {
             ArticleView::create([
                 'article_id' => $article->id,
@@ -84,13 +132,14 @@ class ArticleController extends Controller
         }
 
         $article->content = TextHelper::parseInternalLinks($article->content);
-        return view('articles.show', compact('article'));
+
+        return view('articles.show', compact('article', 'category', 'parentCategory'));
     }
 
     public function edit(Article $article): View
     {
-        $categories = Category::all();
-        return view('articles.edit', compact('article', 'categories'));
+        $categories = Category::whereNotNull('parent_id')->get();
+        return view('articles.form', compact('article', 'categories'));
     }
 
     /**
@@ -100,24 +149,25 @@ class ArticleController extends Controller
     {
         $this->authorize('update', $article);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'category_id' => 'nullable|exists:categories,id',
-        ]);
+        $validated = $this->validateArticle($request);
 
-        ArticleVersion::create([
-            'article_id' => $article->id,
-            'title' => $article->title,
-            'slug' => $article->slug,
-            'content' => $article->content,
-            'category_id' => $article->category_id,
-            'user_id' => $article->user_id,
-        ]);
+        $article->fill($validated);
 
-        $article->update($validated);
+        if ($article->isDirty()) {
+            ArticleVersion::create([
+                'article_id' => $article->id,
+                'title' => $article->getOriginal('title'),
+                'slug' => $article->getOriginal('slug'),
+                'content' => $article->getOriginal('content'),
+                'description' => $article->getOriginal('description'),
+                'category_id' => $article->getOriginal('category_id'),
+                'user_id' => $article->getOriginal('user_id'),
+            ]);
 
-        return redirect()->route('articles.index')->with('success', 'Стаття оновлена!');
+            $article->save();
+        }
+
+        return redirect()->route('article.show', $article->slug)->with('success', 'Стаття оновлена!');
     }
 
     /**
@@ -128,13 +178,14 @@ class ArticleController extends Controller
         $this->authorize('delete', $article);
 
         $article->delete();
-        return redirect()->route('articles.index')->with('success', 'Стаття видалена!');
+
+        return redirect()->back()->with('success', 'Стаття видалена!');
     }
 
     public function approve(Article $article): RedirectResponse
     {
         $article->update(['approved' => true]);
 
-        return redirect()->route('articles.index')->with('success', 'Стаття схвалена!');
+        return redirect()->route('article.show', ['slug' => $article->slug])->with('success', 'Стаття схвалена!');
     }
 }

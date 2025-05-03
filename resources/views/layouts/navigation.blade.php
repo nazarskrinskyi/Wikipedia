@@ -1,23 +1,23 @@
 <nav x-data="{ open: false }" id='navbar'
     class="w-full h-[var(--navbar-height)] bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 z-50">
     <!-- Primary Navigation Menu -->
-    <div class="flex  justify-between items-center max-w-7xl h-full items-center mx-auto px-4
-        sm:px-6 lg:px-8">
+    <div
+        class="flex justify-between items-center max-w-7xl h-full items-center mx-auto px-4
+        sm:px-6 lg:px-8 py-2">
         <!-- Logo -->
         <div class='flex items-center'>
             <div class="shrink-0 flex items-center">
                 <a href="{{ route('home.index') }}">
-                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                    <x-application-logo class="block h-9 w-auto fill-current" />
                 </a>
             </div>
-
-            @if (request()->routeIs('category.show'))
+            @if ($currentCategory)
                 <div class="text-logo font-semibold text-3xl ml-2 mr-1"> / </div>
 
                 <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
                     class="hidden text-logo sm:flex items-center px-1 py-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg ">
                     <a class="font-semibold text-3xl">
-                        front-end
+                        {{ $currentCategory->name }}
                     </a>
                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 10 6">
@@ -28,23 +28,20 @@
                 <div id="dropdown"
                     class="z-10 hidden bg-gray-300 divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
                     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                        <li>
-                            <a href="#"
-                                class="block text-xl px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">
+                        @foreach ($categories as $category)
+                            <li>
+                                <a href="{{ route('category.show', $category->slug) }}"
+                                    class="block text-xl px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">
 
-                                front-end
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="block text-xl px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200">back-end
-                            </a>
-                        </li>
+                                    {{ $category->slug }}
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             @endif
         </div>
-        <div class='flex items-center self-center max-w-2xl flex-grow relative z-50 mx-1'>
+        <div class='flex items-center self-center max-w-2xl flex-grow relative z-50 mx-2'>
             <x-search-input placeholder="Пошук по wiki" />
 
             {{-- Search Results --}}
@@ -57,10 +54,13 @@
         @if (Route::has('login'))
             <div class=" flex justify-end items-center">
                 @auth
-                    <a href="{{ url('/admin') }}"
-                        class="rounded-md  px-3 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                        Admin
-                    </a>
+                    @if (auth()->user()->role != 'user')
+                        <a href="{{ url('/admin') }}"
+                            class="rounded-md  px-3 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                            Admin
+                        </a>
+                    @endif
+                    <x-primary-link href="{{ route('articles.create') }}"> Створити Статью </x-primary-link>
                 @else
                     <a href="{{ route('login') }}"
                         class="rounded-md pl-8 px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
@@ -183,63 +183,88 @@
 
     function showSearchResults(data) {
         const searchResults = document.getElementById('search-results');
-        if (data) {
-            searchResults.style.display = 'block';
-            searchResults.innerHTML = '';
-            if (data.length > 0) {
-                for (let i = 0; i < data.length; i++) {
-                    const location = data[i];
-                    const locationLink = document.createElement('a');
-                    locationLink.href = '/location/' + location.id;
-                    locationLink.textContent = location.name;
-                    locationLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'hover:bg-gray-100',
-                        'dark:text-gray-200', 'dark:hover:bg-gray-600');
-                    searchResults.appendChild(locationLink);
-                }
+        searchResults.innerHTML = '';
 
-            } else {
-                const searchResult = document.createElement('span');
-                searchResult.textContent = 'Нічого не знайдено';
-                searchResult.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'dark:text-gray-200');
-                searchResults.appendChild(searchResult);
-            }
-        } else {
-            searchResults.style.display = 'none';
+        // если ничего нет — скрываем
+        if (!data || (!data.articles.length && !data.categories.length)) {
+            const noResult = document.createElement('span');
+            noResult.textContent = 'Нічого не знайдено';
+            noResult.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700', 'dark:text-gray-200');
+            searchResults.appendChild(noResult);
+            searchResults.style.display = 'block';
+            return;
         }
 
+        searchResults.style.display = 'block';
+
+        if (data.articles.length > 0) {
+            data.articles.forEach(article => {
+                const articleLink = document.createElement('a');
+                articleLink.href = '/article/' + article.slug;
+                articleLink.textContent = article.title;
+                articleLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700',
+                    'hover:bg-gray-100', 'dark:text-gray-200', 'dark:hover:bg-gray-600');
+                searchResults.appendChild(articleLink);
+            });
+        }
+
+        if (data.categories.length > 0) {
+            data.categories.forEach(category => {
+                const categoryLink = document.createElement('a');
+                categoryLink.href = '/category/' + category.slug;
+                categoryLink.textContent = category.name;
+                categoryLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-blue-600',
+                    'hover:bg-gray-100', 'dark:text-blue-400', 'dark:hover:bg-gray-600');
+                searchResults.appendChild(categoryLink);
+            });
+        }
     }
 
     async function fetchSearchResults(query) {
-        const result = await axios.post("/location/find-by-name", {
-            query: query,
+        const result = await axios.post("/search", {
+            query
         });
-
         return result.data;
     }
 
     const handleFetchSearchResults = debounce(async (query) => {
         try {
-            const data = await fetchSearchResults(query);
-
-            if (data) {
-                showSearchResults(data);
+            if (query.trim() === '') {
+                document.getElementById('search-results').innerHTML = '';
+                document.getElementById('search-results').style.display = 'none';
+                return;
             }
+
+            const data = await fetchSearchResults(query);
+            showSearchResults(data);
         } catch (error) {
             console.error('error ' + error);
         }
-    }, 500)
+    }, 500);
 
     function handleSearch(event) {
-        event.preventDefault();
-
         const query = event.currentTarget.value;
-        if (query !== '') {
-            handleFetchSearchResults(query);
-        } else {
-            showSearchResults(null);
-        }
+        handleFetchSearchResults(query);
     }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('default-search');
+        const results = document.getElementById('search-results');
+
+        input.addEventListener('blur', () => {
+            console.log('blur');
+
+            results.style.display = 'none';
+        });
+
+        input.addEventListener('focus', () => {
+            if (results.innerHTML.trim() !== '') {
+                results.style.display = 'block';
+            }
+        });
+    });
 </script>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

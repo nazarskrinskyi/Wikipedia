@@ -9,17 +9,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @method static create(array $array)
  * @method static where(string $string, mixed $id)
+ * @method static latest()
+ * @method static select(string $string)
  * @property mixed $title
  * @property mixed $slug
  * @property mixed $content
  * @property mixed $category_id
  * @property mixed $user_id
+ * @property mixed $description
  */
 class ArticleVersion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['article_id', 'preview_path', 'title', 'slug', 'content', 'category_id', 'user_id'];
+    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description'];
 
     public function article(): BelongsTo
     {
