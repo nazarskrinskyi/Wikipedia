@@ -74,15 +74,14 @@ $updatedContent = preg_replace('~^
 
                 @auth()
                     @if (auth()->user()->id == $article->user_id || auth()->user()->role != 'user')
-                        <x-secondary-button class="flex-shrink-0">
-                            <a href="{{ route('articles.edit', $article) }}"> Редагувати статтю </a>
-                        </x-secondary-button>
+                        <x-secondary-link href="{{ route('articles.edit', $article) }}" class='px-4 py-2'> Редагувати
+                            статтю </x-secondary-link>
                     @endif
                 @endauth
             </div>
 
 
-            <div class='text-black dark:text-white bg-white dark:bg-black ck-content'>
+            <div class='ck-content '>
                 {!! $updatedContent !!}
             </div>
         </div>
@@ -111,56 +110,21 @@ $updatedContent = preg_replace('~^
 
 <style>
     /* Базовые отступы и ширина */
-    .content {
+    .ck-content {
         line-height: 1.7;
         font-size: 1.05rem;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+        background-color: #fff !important;
+        color: #000 !important;
     }
 
-    /* Заголовки */
-    .content h1,
-    .content h2,
-    .content h3,
-    .content h4,
-    .content h5,
-    .content h6 {
-        margin-top: 1.5em;
-        margin-bottom: 0.5em;
-        font-weight: 700;
-        line-height: 1.3;
-    }
-
-    .content h1 {
-        font-size: 2rem;
-    }
-
-    .content h2 {
-        font-size: 1.75rem;
-    }
-
-    .content h3 {
-        font-size: 1.5rem;
-    }
-
-    .content h4 {
-        font-size: 1.25rem;
-    }
-
-    .content h5 {
-        font-size: 1.1rem;
-    }
-
-    .content h6 {
-        font-size: 1rem;
-    }
-
-    /* Параграфы */
-    .content p {
-        margin: 1em 0;
+    .dark .ck-content {
+        background-color: #000000 !important;
+        color: #ffffff !important;
     }
 
     /* Блок кода */
-    .content pre {
+    .ck-content pre {
         background: #f5f5f5;
         padding: 1em;
         border-radius: 8px;
@@ -168,7 +132,7 @@ $updatedContent = preg_replace('~^
         font-size: 0.95rem;
     }
 
-    .content code {
+    .ck-content code {
         background: #f5f5f5;
         padding: 0.2em 0.4em;
         border-radius: 4px;
@@ -176,7 +140,7 @@ $updatedContent = preg_replace('~^
     }
 
     /* Блок цитат */
-    .content blockquote {
+    .ck-content blockquote {
         border-left: 4px solid #ccc;
         padding-left: 1em;
         color: #666;
@@ -186,77 +150,12 @@ $updatedContent = preg_replace('~^
         border-radius: 4px;
     }
 
-    /* Списки */
-    .content ul,
-    .content ol {
-        margin: 1em 0 1em 1.5em;
-    }
 
-    .content li {
-        margin-bottom: 0.5em;
-    }
 
-    /* Таблицы */
-    .content table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 1.5em 0;
-        font-size: 0.95rem;
-    }
-
-    .content th,
-    .content td {
-        border: 1px solid #ddd;
-        padding: 0.75em 1em;
-        text-align: left;
-    }
-
-    .content thead {
-        background: #f5f5f5;
-    }
-
-    /* Картинки */
-    .content img {
-        max-width: 100%;
-        height: auto;
-        margin: 1em 0;
-        border-radius: 8px;
-    }
-
-    /* Горизонтальная линия */
-    .content hr {
-        border: none;
-        border-top: 1px solid #ddd;
-        margin: 2em 0;
-    }
-
-    /* Адаптация под тёмную тему */
-    @media (prefers-color-scheme: dark) {
-
-        .content pre,
-        .content code {
-            background: #2d2d2d;
-            color: #ffffff;
-        }
-
-        .content blockquote {
-            background: #2d2d2d;
-            border-left-color: #555;
-            color: #bbb;
-        }
-
-        .content table th,
-        .content table td {
-            border-color: #444;
-        }
-
-        .content thead {
-            background: #333;
-        }
-
-        .content hr {
-            border-top-color: #444;
-        }
+    .dark .ck-content pre,
+    .dark .ck-content code {
+        background: #2d2d2d;
+        color: #ffffff;
     }
 </style>
 
@@ -264,9 +163,7 @@ $updatedContent = preg_replace('~^
     document.addEventListener("DOMContentLoaded", function() {
         const bookmarks = document.getElementById('bookmarks');
         const navLinks = bookmarks.querySelectorAll(".aside-link");
-        const sections = document.querySelector('.content').querySelectorAll("a[id]");
-
-        console.log(bookmarks);
+        const sections = document.querySelector('.ck-content').querySelectorAll("a[id]");
 
         function activateLink() {
             let index = sections.length;
