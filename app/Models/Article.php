@@ -25,7 +25,7 @@ class Article extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'slug', 'content', 'category_id', 'user_id', 'approved', 'description'];
+    protected $fillable = ['title', 'slug', 'content', 'category_id', 'user_id', 'approved', 'description', 'created_at', 'updated_at'];
 
     protected static function boot(): void
     {
