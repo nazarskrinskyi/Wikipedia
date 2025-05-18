@@ -54,7 +54,7 @@
         @if (Route::has('login'))
             <div class=" flex justify-end items-center">
                 @auth
-                    @if (auth()->user()->role != 'user')
+                    @if (auth()->user()->role == 'admin')
                         <a href="{{ url('/admin') }}"
                             class="rounded-md  px-3 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                             Admin
@@ -203,7 +203,7 @@
                 articleLink.href = '/article/' + article.slug;
                 articleLink.textContent = article.title;
                 articleLink.classList.add('block', 'px-4', 'py-2', 'text-lg', 'text-gray-700',
-                    'hover:bg-gray-100', 'dark:text-gray-200', 'dark:hover:bg-gray-600');
+                    'hover:bg-gray-100', 'dark:text-gray-200', 'dark:hover:bg-gray-600', 'cursor-pointer');
                 searchResults.appendChild(articleLink);
             });
         }
@@ -252,9 +252,9 @@
         const results = document.getElementById('search-results');
 
         input.addEventListener('blur', () => {
-            console.log('blur');
-
-            results.style.display = 'none';
+            setTimeout(() => {
+                results.style.display = 'none';
+            }, 200);
         });
 
         input.addEventListener('focus', () => {

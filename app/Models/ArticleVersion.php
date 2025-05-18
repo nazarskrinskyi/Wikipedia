@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static create(array $array)
@@ -20,9 +21,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ArticleVersion extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description'];
+    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description', 'deleted_at'];
 
     public function article(): BelongsTo
     {
@@ -37,5 +38,22 @@ class ArticleVersion extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'article_id' => $this->article_id,
+            'title' => $this->title,
+            'slug' => $this->slug,
+            'content' => $this->content,
+            'category_id' => $this->category_id,
+            'user_id' => $this->user_id,
+            'description' => $this->description,
+            'deleted_at' => $this->deleted_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
     }
 }

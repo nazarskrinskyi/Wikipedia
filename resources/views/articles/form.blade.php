@@ -158,9 +158,6 @@
             });
         });
 
-
-
-
         const {
             ClassicEditor,
             Autoformat,
@@ -206,6 +203,8 @@
             Subscript,
             Strikethrough,
             Superscript,
+            List,
+            ListProperties,
             MediaEmbed,
             CodeBlock,
         } = window.CKEDITOR;
@@ -218,6 +217,8 @@
                 items: [
                     "undo",
                     "redo",
+                    "bulletedList",
+                    "numberedList",
                     "codeBlock",
                     "bookmark",
                     "|",
@@ -252,6 +253,8 @@
                 AutoImage,
                 Autosave,
                 BlockQuote,
+                List,
+                ListProperties,
                 Bold,
                 CloudServices,
                 Emoji,

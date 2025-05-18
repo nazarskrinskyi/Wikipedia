@@ -65,11 +65,12 @@ $updatedContent = preg_replace('~^
             </ul>
         </aside>
 
-        <div class='max-w-5xl w-full '>
+        <div class='flex flex-col gap-3 max-w-5xl w-full '>
+            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Оновлено: {{ $article->updated_at->format('d.m.Y') }}</span>
             <h2 id='{{ $article->slug }}' class="relative mb-2 text-4xl tracking-tight text-gray-900 dark:text-white">
                 {{ $article->title }}
             </h2>
-            <div class='mb-3 flex justify-between items-center'>
+            <div class='flex justify-between items-center'>
                 {{ Breadcrumbs::render('article', $article) }}
 
                 @auth()

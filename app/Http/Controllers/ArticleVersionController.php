@@ -8,17 +8,26 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use function Pest\version;
+
 class ArticleVersionController extends Controller
 {
     public function index(): View
     {
-        $versions = ArticleVersion::latest()->paginate(10);
+        $versions = ArticleVersion::latest()->where('deleted_at', null)->paginate(10);
         return view('admin.article_versions.index', compact('versions'));
     }
 
-    public function destroy(ArticleVersion $version): RedirectResponse
+    /**
+     * @throws \Throwable
+     */
+    public function destroy(Request $request): RedirectResponse
     {
-        $version->forceDelete();
+        $queryString = $request->getQueryString();
+
+        $id = $queryString ? explode('?', $request->fullUrl())[1] : null;
+        $version = ArticleVersion::findOrFail($id);
+        $version->delete();
 
         return redirect()->back()->with('success', 'Версія статті видалена!');
     }
@@ -30,14 +39,14 @@ class ArticleVersionController extends Controller
         $versions = collect();
 
         if ($search) {
-            $article = Article::where('title', 'LIKE', "%$search%")->first();
+            $article = Article::where('title', 'LIKE', "%$search%")->andWhere('deleted_at', null)->first();
 
             if ($article) {
                 $versions = $article->versions()->latest()->paginate(10);
             }
         }
 
-        $versions = $search ? $versions : ArticleVersion::latest()->paginate(10);
+        $versions = $search ? $versions : ArticleVersion::latest()->where('deleted_at', null)->paginate(10);
 
         return view('admin.article_versions.index', compact('versions', 'search'));
     }

@@ -20,7 +20,7 @@ class CategoryPolicy
      */
     public function create(User $user): bool
     {
-        return $user->isEditor() || $user->isAdmin() || $user->isModerator();
+        return $user->isAdmin() || $user->isModerator();
     }
 
     /**
@@ -28,7 +28,7 @@ class CategoryPolicy
      */
     public function update(User $user, Category $category): bool
     {
-        return $user->isEditor() || $user->isAdmin() || $user->isModerator();
+        return $user->isAdmin() || $user->isModerator();
     }
 
     /**

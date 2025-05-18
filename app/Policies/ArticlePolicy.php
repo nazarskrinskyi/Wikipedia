@@ -16,7 +16,7 @@ class ArticlePolicy
 
     public function create(User $user): bool
     {
-        return $user->isEditor() || $user->isAdmin() || $user->isUser();
+        return $user->isAdmin() || $user->isUser();
     }
 
     public function update(User $user, Article $article): bool
