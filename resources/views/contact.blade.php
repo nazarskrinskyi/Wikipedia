@@ -21,6 +21,9 @@
             <ul class="list-disc list-inside text-gray-800 dark:text-gray-200 space-y-2">
                 <li><strong>Мельник Владислав</strong> – vlad.melnyk28@gmail.com</li>
                 <li><strong>Скринський Назар</strong> – nazarskrinskyi@gmail.com</li>
+                <li><strong>Ткаченко Владислав</strong> – vladislav.tkachenko@gmail.com</li>
+                <li><strong>Перепьолкін Олександр</strong> – sanya.perepilkin@gmail.com</li>
+                <li><strong>Терещенко Євген</strong> – yevhen.tereshechenko@gmail.com</li>
             </ul>
         </div>
 
