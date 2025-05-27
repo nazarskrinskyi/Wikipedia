@@ -23,7 +23,7 @@ class ArticleVersion extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description', 'deleted_at'];
+    protected $fillable = ['article_id', 'title', 'slug', 'content', 'category_id', 'user_id', 'description'];
 
     public function article(): BelongsTo
     {
@@ -51,7 +51,6 @@ class ArticleVersion extends Model
             'category_id' => $this->category_id,
             'user_id' => $this->user_id,
             'description' => $this->description,
-            'deleted_at' => $this->deleted_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

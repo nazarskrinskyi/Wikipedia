@@ -14,7 +14,7 @@ class ArticleVersionController extends Controller
 {
     public function index(): View
     {
-        $versions = ArticleVersion::latest()->where('deleted_at', null)->paginate(10);
+        $versions = ArticleVersion::latest()->paginate(10);
         return view('admin.article_versions.index', compact('versions'));
     }
 
@@ -39,14 +39,14 @@ class ArticleVersionController extends Controller
         $versions = collect();
 
         if ($search) {
-            $article = Article::where('title', 'LIKE', "%$search%")->andWhere('deleted_at', null)->first();
+            $article = Article::where('title', 'LIKE', "%$search%")->first();
 
             if ($article) {
                 $versions = $article->versions()->latest()->paginate(10);
             }
         }
 
-        $versions = $search ? $versions : ArticleVersion::latest()->where('deleted_at', null)->paginate(10);
+        $versions = $search ? $versions : ArticleVersion::latest()->paginate(10);
 
         return view('admin.article_versions.index', compact('versions', 'search'));
     }
