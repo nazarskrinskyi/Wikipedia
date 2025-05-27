@@ -12,6 +12,7 @@ use App\Http\Controllers\CKEditorUploadController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/dashboard', function () {
@@ -45,14 +46,18 @@ Route::post('/articles/{article}/dislike', [ArticleLikeController::class, 'disli
 
 Route::get('/random', [ArticleController::class, 'random'])->name('articles.random');
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'verified', AdminMiddleware::class])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
     Route::get('/contact-us', [ContactUsController::class, 'index'])->name('contact-us.index');
     Route::get('/contact-us/{id}', [ContactUsController::class, 'show'])->name('contact-us.show');
     Route::post('/send/contact-us', [ContactUsController::class, 'store'])->name('contact-us.upload');
 
     Route::get('articles-versions/', [ArticleVersionController::class, 'index'])->name('articles-versions.index');
     Route::get('articles-versions/filter', [ArticleVersionController::class, 'filterArticles'])->name('articles-versions.filter');
-    Route::delete('articles-versions/delete', [ArticleVersionController::class, 'destroy'])->name('articles-versions.destroy');
+    Route::delete('articles-versions/delete/', [ArticleVersionController::class, 'destroy'])->name('articles-versions.destroy');
     Route::get('articles-versions/{version}', [ArticleVersionController::class, 'show'])->name('articles-versions.show');
     Route::post('articles-versions/{version}', [ArticleVersionController::class, 'restore'])->name('articles-versions.restore');
 
